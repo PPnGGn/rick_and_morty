@@ -6,14 +6,14 @@ part of 'entities.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_CharactersEntity _$CharactersEntityFromJson(Map<String, dynamic> json) =>
-    _CharactersEntity(
+_CharacterEntity _$CharacterEntityFromJson(Map<String, dynamic> json) =>
+    _CharacterEntity(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
-      status: json['status'] as String,
+      status: $enumDecode(_$CharacterStatusEnumMap, json['status']),
       species: json['species'] as String,
       type: json['type'] as String,
-      gender: json['gender'] as String,
+      gender: $enumDecode(_$CharacterGenderEnumMap, json['gender']),
       origin: json['origin'] == null
           ? null
           : OriginEntity.fromJson(json['origin'] as Map<String, dynamic>),
@@ -27,20 +27,33 @@ _CharactersEntity _$CharactersEntityFromJson(Map<String, dynamic> json) =>
       url: json['url'] as String,
     );
 
-Map<String, dynamic> _$CharactersEntityToJson(_CharactersEntity instance) =>
+Map<String, dynamic> _$CharacterEntityToJson(_CharacterEntity instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'status': instance.status,
+      'status': _$CharacterStatusEnumMap[instance.status]!,
       'species': instance.species,
       'type': instance.type,
-      'gender': instance.gender,
+      'gender': _$CharacterGenderEnumMap[instance.gender]!,
       'origin': instance.origin,
       'location': instance.location,
       'image': instance.image,
       'episode': instance.episode,
       'url': instance.url,
     };
+
+const _$CharacterStatusEnumMap = {
+  CharacterStatus.alive: 'Alive',
+  CharacterStatus.dead: 'Dead',
+  CharacterStatus.unknown: 'unknown',
+};
+
+const _$CharacterGenderEnumMap = {
+  CharacterGender.female: 'Female',
+  CharacterGender.male: 'Male',
+  CharacterGender.genderless: 'Genderless',
+  CharacterGender.unknown: 'unknown',
+};
 
 _OriginEntity _$OriginEntityFromJson(Map<String, dynamic> json) =>
     _OriginEntity(name: json['name'] as String?, url: json['url'] as String?);

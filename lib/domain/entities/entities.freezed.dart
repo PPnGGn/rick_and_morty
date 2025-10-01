@@ -13,22 +13,22 @@ part of 'entities.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$CharactersEntity {
+mixin _$CharacterEntity {
 
- int get id; String get name; String get status; String get species; String get type; String get gender; OriginEntity? get origin; LocationEntity? get location; String get image; List<String> get episode; String get url;
-/// Create a copy of CharactersEntity
+ int get id; String get name; CharacterStatus get status; String get species; String get type; CharacterGender get gender; OriginEntity? get origin; LocationEntity? get location; String get image; List<String> get episode; String get url;
+/// Create a copy of CharacterEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$CharactersEntityCopyWith<CharactersEntity> get copyWith => _$CharactersEntityCopyWithImpl<CharactersEntity>(this as CharactersEntity, _$identity);
+$CharacterEntityCopyWith<CharacterEntity> get copyWith => _$CharacterEntityCopyWithImpl<CharacterEntity>(this as CharacterEntity, _$identity);
 
-  /// Serializes this CharactersEntity to a JSON map.
+  /// Serializes this CharacterEntity to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CharactersEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.species, species) || other.species == species)&&(identical(other.type, type) || other.type == type)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.location, location) || other.location == location)&&(identical(other.image, image) || other.image == image)&&const DeepCollectionEquality().equals(other.episode, episode)&&(identical(other.url, url) || other.url == url));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CharacterEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.species, species) || other.species == species)&&(identical(other.type, type) || other.type == type)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.location, location) || other.location == location)&&(identical(other.image, image) || other.image == image)&&const DeepCollectionEquality().equals(other.episode, episode)&&(identical(other.url, url) || other.url == url));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -37,18 +37,18 @@ int get hashCode => Object.hash(runtimeType,id,name,status,species,type,gender,o
 
 @override
 String toString() {
-  return 'CharactersEntity(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, origin: $origin, location: $location, image: $image, episode: $episode, url: $url)';
+  return 'CharacterEntity(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, origin: $origin, location: $location, image: $image, episode: $episode, url: $url)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $CharactersEntityCopyWith<$Res>  {
-  factory $CharactersEntityCopyWith(CharactersEntity value, $Res Function(CharactersEntity) _then) = _$CharactersEntityCopyWithImpl;
+abstract mixin class $CharacterEntityCopyWith<$Res>  {
+  factory $CharacterEntityCopyWith(CharacterEntity value, $Res Function(CharacterEntity) _then) = _$CharacterEntityCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String status, String species, String type, String gender, OriginEntity? origin, LocationEntity? location, String image, List<String> episode, String url
+ int id, String name, CharacterStatus status, String species, String type, CharacterGender gender, OriginEntity? origin, LocationEntity? location, String image, List<String> episode, String url
 });
 
 
@@ -56,24 +56,24 @@ $OriginEntityCopyWith<$Res>? get origin;$LocationEntityCopyWith<$Res>? get locat
 
 }
 /// @nodoc
-class _$CharactersEntityCopyWithImpl<$Res>
-    implements $CharactersEntityCopyWith<$Res> {
-  _$CharactersEntityCopyWithImpl(this._self, this._then);
+class _$CharacterEntityCopyWithImpl<$Res>
+    implements $CharacterEntityCopyWith<$Res> {
+  _$CharacterEntityCopyWithImpl(this._self, this._then);
 
-  final CharactersEntity _self;
-  final $Res Function(CharactersEntity) _then;
+  final CharacterEntity _self;
+  final $Res Function(CharacterEntity) _then;
 
-/// Create a copy of CharactersEntity
+/// Create a copy of CharacterEntity
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? status = null,Object? species = null,Object? type = null,Object? gender = null,Object? origin = freezed,Object? location = freezed,Object? image = null,Object? episode = null,Object? url = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,species: null == species ? _self.species : species // ignore: cast_nullable_to_non_nullable
+as CharacterStatus,species: null == species ? _self.species : species // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,gender: null == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
-as String,origin: freezed == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
+as CharacterGender,origin: freezed == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
 as OriginEntity?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as LocationEntity?,image: null == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as String,episode: null == episode ? _self.episode : episode // ignore: cast_nullable_to_non_nullable
@@ -81,7 +81,7 @@ as List<String>,url: null == url ? _self.url : url // ignore: cast_nullable_to_n
 as String,
   ));
 }
-/// Create a copy of CharactersEntity
+/// Create a copy of CharacterEntity
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -93,7 +93,7 @@ $OriginEntityCopyWith<$Res>? get origin {
   return $OriginEntityCopyWith<$Res>(_self.origin!, (value) {
     return _then(_self.copyWith(origin: value));
   });
-}/// Create a copy of CharactersEntity
+}/// Create a copy of CharacterEntity
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -109,8 +109,8 @@ $LocationEntityCopyWith<$Res>? get location {
 }
 
 
-/// Adds pattern-matching-related methods to [CharactersEntity].
-extension CharactersEntityPatterns on CharactersEntity {
+/// Adds pattern-matching-related methods to [CharacterEntity].
+extension CharacterEntityPatterns on CharacterEntity {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -123,10 +123,10 @@ extension CharactersEntityPatterns on CharactersEntity {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CharactersEntity value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CharacterEntity value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _CharactersEntity() when $default != null:
+case _CharacterEntity() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -145,10 +145,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CharactersEntity value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CharacterEntity value)  $default,){
 final _that = this;
 switch (_that) {
-case _CharactersEntity():
+case _CharacterEntity():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -166,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CharactersEntity value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CharacterEntity value)?  $default,){
 final _that = this;
 switch (_that) {
-case _CharactersEntity() when $default != null:
+case _CharacterEntity() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -187,9 +187,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String status,  String species,  String type,  String gender,  OriginEntity? origin,  LocationEntity? location,  String image,  List<String> episode,  String url)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  CharacterStatus status,  String species,  String type,  CharacterGender gender,  OriginEntity? origin,  LocationEntity? location,  String image,  List<String> episode,  String url)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _CharactersEntity() when $default != null:
+case _CharacterEntity() when $default != null:
 return $default(_that.id,_that.name,_that.status,_that.species,_that.type,_that.gender,_that.origin,_that.location,_that.image,_that.episode,_that.url);case _:
   return orElse();
 
@@ -208,9 +208,9 @@ return $default(_that.id,_that.name,_that.status,_that.species,_that.type,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String status,  String species,  String type,  String gender,  OriginEntity? origin,  LocationEntity? location,  String image,  List<String> episode,  String url)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  CharacterStatus status,  String species,  String type,  CharacterGender gender,  OriginEntity? origin,  LocationEntity? location,  String image,  List<String> episode,  String url)  $default,) {final _that = this;
 switch (_that) {
-case _CharactersEntity():
+case _CharacterEntity():
 return $default(_that.id,_that.name,_that.status,_that.species,_that.type,_that.gender,_that.origin,_that.location,_that.image,_that.episode,_that.url);case _:
   throw StateError('Unexpected subclass');
 
@@ -228,9 +228,9 @@ return $default(_that.id,_that.name,_that.status,_that.species,_that.type,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String status,  String species,  String type,  String gender,  OriginEntity? origin,  LocationEntity? location,  String image,  List<String> episode,  String url)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  CharacterStatus status,  String species,  String type,  CharacterGender gender,  OriginEntity? origin,  LocationEntity? location,  String image,  List<String> episode,  String url)?  $default,) {final _that = this;
 switch (_that) {
-case _CharactersEntity() when $default != null:
+case _CharacterEntity() when $default != null:
 return $default(_that.id,_that.name,_that.status,_that.species,_that.type,_that.gender,_that.origin,_that.location,_that.image,_that.episode,_that.url);case _:
   return null;
 
@@ -242,16 +242,16 @@ return $default(_that.id,_that.name,_that.status,_that.species,_that.type,_that.
 /// @nodoc
 @JsonSerializable()
 
-class _CharactersEntity implements CharactersEntity {
-  const _CharactersEntity({required this.id, required this.name, required this.status, required this.species, required this.type, required this.gender, this.origin, this.location, required this.image, required final  List<String> episode, required this.url}): _episode = episode;
-  factory _CharactersEntity.fromJson(Map<String, dynamic> json) => _$CharactersEntityFromJson(json);
+class _CharacterEntity implements CharacterEntity {
+  const _CharacterEntity({required this.id, required this.name, required this.status, required this.species, required this.type, required this.gender, this.origin, this.location, required this.image, required final  List<String> episode, required this.url}): _episode = episode;
+  factory _CharacterEntity.fromJson(Map<String, dynamic> json) => _$CharacterEntityFromJson(json);
 
 @override final  int id;
 @override final  String name;
-@override final  String status;
+@override final  CharacterStatus status;
 @override final  String species;
 @override final  String type;
-@override final  String gender;
+@override final  CharacterGender gender;
 @override final  OriginEntity? origin;
 @override final  LocationEntity? location;
 @override final  String image;
@@ -264,20 +264,20 @@ class _CharactersEntity implements CharactersEntity {
 
 @override final  String url;
 
-/// Create a copy of CharactersEntity
+/// Create a copy of CharacterEntity
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$CharactersEntityCopyWith<_CharactersEntity> get copyWith => __$CharactersEntityCopyWithImpl<_CharactersEntity>(this, _$identity);
+_$CharacterEntityCopyWith<_CharacterEntity> get copyWith => __$CharacterEntityCopyWithImpl<_CharacterEntity>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$CharactersEntityToJson(this, );
+  return _$CharacterEntityToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CharactersEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.species, species) || other.species == species)&&(identical(other.type, type) || other.type == type)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.location, location) || other.location == location)&&(identical(other.image, image) || other.image == image)&&const DeepCollectionEquality().equals(other._episode, _episode)&&(identical(other.url, url) || other.url == url));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CharacterEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.status, status) || other.status == status)&&(identical(other.species, species) || other.species == species)&&(identical(other.type, type) || other.type == type)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.origin, origin) || other.origin == origin)&&(identical(other.location, location) || other.location == location)&&(identical(other.image, image) || other.image == image)&&const DeepCollectionEquality().equals(other._episode, _episode)&&(identical(other.url, url) || other.url == url));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -286,18 +286,18 @@ int get hashCode => Object.hash(runtimeType,id,name,status,species,type,gender,o
 
 @override
 String toString() {
-  return 'CharactersEntity(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, origin: $origin, location: $location, image: $image, episode: $episode, url: $url)';
+  return 'CharacterEntity(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, origin: $origin, location: $location, image: $image, episode: $episode, url: $url)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$CharactersEntityCopyWith<$Res> implements $CharactersEntityCopyWith<$Res> {
-  factory _$CharactersEntityCopyWith(_CharactersEntity value, $Res Function(_CharactersEntity) _then) = __$CharactersEntityCopyWithImpl;
+abstract mixin class _$CharacterEntityCopyWith<$Res> implements $CharacterEntityCopyWith<$Res> {
+  factory _$CharacterEntityCopyWith(_CharacterEntity value, $Res Function(_CharacterEntity) _then) = __$CharacterEntityCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String status, String species, String type, String gender, OriginEntity? origin, LocationEntity? location, String image, List<String> episode, String url
+ int id, String name, CharacterStatus status, String species, String type, CharacterGender gender, OriginEntity? origin, LocationEntity? location, String image, List<String> episode, String url
 });
 
 
@@ -305,24 +305,24 @@ $Res call({
 
 }
 /// @nodoc
-class __$CharactersEntityCopyWithImpl<$Res>
-    implements _$CharactersEntityCopyWith<$Res> {
-  __$CharactersEntityCopyWithImpl(this._self, this._then);
+class __$CharacterEntityCopyWithImpl<$Res>
+    implements _$CharacterEntityCopyWith<$Res> {
+  __$CharacterEntityCopyWithImpl(this._self, this._then);
 
-  final _CharactersEntity _self;
-  final $Res Function(_CharactersEntity) _then;
+  final _CharacterEntity _self;
+  final $Res Function(_CharacterEntity) _then;
 
-/// Create a copy of CharactersEntity
+/// Create a copy of CharacterEntity
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? status = null,Object? species = null,Object? type = null,Object? gender = null,Object? origin = freezed,Object? location = freezed,Object? image = null,Object? episode = null,Object? url = null,}) {
-  return _then(_CharactersEntity(
+  return _then(_CharacterEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,species: null == species ? _self.species : species // ignore: cast_nullable_to_non_nullable
+as CharacterStatus,species: null == species ? _self.species : species // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,gender: null == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
-as String,origin: freezed == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
+as CharacterGender,origin: freezed == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
 as OriginEntity?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as LocationEntity?,image: null == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as String,episode: null == episode ? _self._episode : episode // ignore: cast_nullable_to_non_nullable
@@ -331,7 +331,7 @@ as String,
   ));
 }
 
-/// Create a copy of CharactersEntity
+/// Create a copy of CharacterEntity
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -343,7 +343,7 @@ $OriginEntityCopyWith<$Res>? get origin {
   return $OriginEntityCopyWith<$Res>(_self.origin!, (value) {
     return _then(_self.copyWith(origin: value));
   });
-}/// Create a copy of CharactersEntity
+}/// Create a copy of CharacterEntity
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

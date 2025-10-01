@@ -1,29 +1,29 @@
 part of 'response_models.dart';
 
 @freezed
-abstract class Characters with _$Characters {
-  const factory Characters({
+abstract class Character with _$Character {
+  const factory Character({
     required int id,
     required String name,
-    required String status,
+    required CharacterStatus status,
     required String species,
     required String type,
-    required String gender,
+    required CharacterGender gender,
     Origin? origin,
     Location? location,
     required String image,
     required List<String> episode,
     required String url,
-  }) = _Characters;
+  }) = _Character;
 
-  factory Characters.fromJson(Map<String, dynamic> json) =>
-      _$CharactersFromJson(json);
+  factory Character.fromJson(Map<String, dynamic> json) =>
+      _$CharacterFromJson(json);
 }
 
 // --- Маппер из модели в сущность
-extension CharactersModelMapper on Characters {
-  CharactersEntity toEntity() {
-    return CharactersEntity(
+extension CharactersModelMapper on Character {
+  CharacterEntity toEntity() {
+    return CharacterEntity(
       id: id,
       name: name,
       status: status,
@@ -38,5 +38,3 @@ extension CharactersModelMapper on Characters {
     );
   }
 }
-
-

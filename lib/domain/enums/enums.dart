@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-/// Статусы персонажей
+// Статусы персонажей
 @JsonEnum(valueField: 'value')
 enum CharacterStatus {
   @JsonValue('Alive')
@@ -14,7 +14,7 @@ enum CharacterStatus {
   const CharacterStatus(this.value);
 }
 
-/// Пол персонажей
+// Пол персонажей
 @JsonEnum(valueField: 'value')
 enum CharacterGender {
   @JsonValue('Female')

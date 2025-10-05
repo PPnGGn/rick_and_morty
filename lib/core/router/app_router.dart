@@ -1,7 +1,6 @@
 import "package:auto_route/auto_route.dart";
 import "package:rick_and_morty/core/router/app_router.gr.dart";
 
-
 @AutoRouterConfig(replaceInRouteName: "Screen|Page,Route")
 class AppRouter extends RootStackRouter {
   @override
@@ -19,7 +18,6 @@ class AppRouter extends RootStackRouter {
           path: "characters",
           children: [
             AutoRoute(page: CharactersRoute.page, path: "start", initial: true),
-          
           ],
         ),
 
@@ -30,7 +28,7 @@ class AppRouter extends RootStackRouter {
             AutoRoute(page: FavoritesRoute.page, path: "start", initial: true),
           ],
         ),
-     
+
         AutoRoute(
           page: SettingsWrapperRoute.page,
           path: "settings",

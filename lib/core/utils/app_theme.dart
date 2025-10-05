@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:rick_and_morty/core/utils/app_colors.dart";
 
-
 const Color primary = AppColors.primary;
 const Color surface = AppColors.surface;
 final ThemeData appTheme = ThemeData(
@@ -59,11 +58,7 @@ final ThemeData appTheme = ThemeData(
     ),
   ),
 
-
-
   inputDecorationTheme: InputDecorationTheme(
-   
-    
     fillColor: AppColors.surface,
 
     border: OutlineInputBorder(
@@ -80,7 +75,6 @@ final ThemeData appTheme = ThemeData(
     ),
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     hintStyle: const TextStyle(
-      
       fontSize: 14,
       fontWeight: FontWeight.normal,
       color: AppColors.onSurface,

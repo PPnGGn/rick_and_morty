@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import "package:rick_and_morty/core/router/app_router.gr.dart";
 import "package:rick_and_morty/core/utils/app_colors.dart";
 
-
 @RoutePage()
 class HomeWrapperPage extends StatelessWidget {
   const HomeWrapperPage({super.key});

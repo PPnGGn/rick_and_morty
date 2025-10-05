@@ -25,6 +25,10 @@ import 'package:rick_and_morty/domain/repositories/character_repository.dart'
     as _i113;
 import 'package:rick_and_morty/domain/usecases/character_usecases.dart'
     as _i892;
+import 'package:rick_and_morty/ui/characters/cubit/characters_cubit.dart'
+    as _i275;
+import 'package:rick_and_morty/ui/favorites/cubit/favorites_cubit.dart'
+    as _i853;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -66,6 +70,20 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i892.IsFavoriteUseCase>(
       () => _i892.IsFavoriteUseCase(gh<_i113.CharacterRepository>()),
+    );
+    gh.factory<_i853.FavoritesCubit>(
+      () => _i853.FavoritesCubit(
+        gh<_i892.GetFavoritesUseCase>(),
+        gh<_i892.RemoveFromFavoritesUseCase>(),
+      ),
+    );
+    gh.factory<_i275.CharactersCubit>(
+      () => _i275.CharactersCubit(
+        gh<_i892.GetCharactersUseCase>(),
+        gh<_i892.AddToFavoritesUseCase>(),
+        gh<_i892.RemoveFromFavoritesUseCase>(),
+        gh<_i892.IsFavoriteUseCase>(),
+      ),
     );
     return this;
   }

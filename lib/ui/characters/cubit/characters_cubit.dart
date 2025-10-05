@@ -1,11 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:injectable/injectable.dart';
 import 'package:rick_and_morty/domain/entities/entities.dart';
 import 'package:rick_and_morty/domain/usecases/character_usecases.dart';
 
 part 'characters_state.dart';
 part 'characters_cubit.freezed.dart';
 
+@Injectable()
 class CharactersCubit extends Cubit<CharactersState> {
   final GetCharactersUseCase _getCharactersUseCase;
   final AddToFavoritesUseCase _addToFavoritesUseCase;

@@ -1,10 +1,11 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rick_and_morty/domain/usecases/character_usecases.dart';
 import 'package:rick_and_morty/ui/characters/cubit/characters_cubit.dart';
 import 'package:rick_and_morty/ui/widgets/character_card.dart';
 
+@RoutePage()
 class CharactersPage extends StatelessWidget {
   const CharactersPage({super.key});
 
@@ -13,17 +14,12 @@ class CharactersPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return BlocProvider(
-      create: (context) => CharactersCubit(
-        GetIt.instance<GetCharactersUseCase>(),
-        GetIt.instance<AddToFavoritesUseCase>(),
-        GetIt.instance<RemoveFromFavoritesUseCase>(),
-        GetIt.instance<IsFavoriteUseCase>(),
-      )..fetchCharacters(),
+      create: (context) => GetIt.instance<CharactersCubit>()..fetchCharacters(),
       child: Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(
           title: Text('Rick & Morty', style: theme.textTheme.titleLarge),
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           foregroundColor: theme.colorScheme.primary,
           elevation: 0.5,
         ),
@@ -44,20 +40,14 @@ class CharactersPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final character = characters[index];
                   // Асинхронно узнаём isFavorite
-                  return FutureBuilder<bool>(
-                    future: cubit.isFavorite(character.id),
-                    builder: (context, snapshot) {
-                      final isFavorite = snapshot.data ?? false;
-                      return CharacterCard(
-                        character: character,
-                        isFavorite: isFavorite,
-                        onTap: () {},
-                        onFavoriteToggle: () {
-                          cubit
-                              .toggleFavorite(character)
-                              .then((_) => cubit.fetchCharacters());
-                        },
-                      );
+                  final isFavorite =
+                      cubit.isFavoriteSync(character.id) ?? false;
+                  return CharacterCard(
+                    character: character,
+                    isFavorite: isFavorite,
+                    onTap: () {},
+                    onFavoriteToggle: () {
+                      cubit.toggleFavorite(character);
                     },
                   );
                 },

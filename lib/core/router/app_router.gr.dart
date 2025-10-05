@@ -14,12 +14,9 @@ import 'package:rick_and_morty/core/route_wrappers/characters.dart' as _i2;
 import 'package:rick_and_morty/core/route_wrappers/favorites.dart' as _i4;
 import 'package:rick_and_morty/core/route_wrappers/home.dart' as _i5;
 import 'package:rick_and_morty/core/route_wrappers/settings.dart' as _i7;
-import 'package:rick_and_morty/presentation/pages/characters/characters_page.dart'
-    as _i1;
-import 'package:rick_and_morty/presentation/pages/favorites/favorites_page.dart'
-    as _i3;
-import 'package:rick_and_morty/presentation/pages/settings/settings_page.dart'
-    as _i6;
+import 'package:rick_and_morty/ui/characters/characters_page.dart' as _i1;
+import 'package:rick_and_morty/ui/favorites/favorites_page.dart' as _i3;
+import 'package:rick_and_morty/ui/settings/settings_page.dart' as _i6;
 
 /// generated route for
 /// [_i1.CharactersPage]

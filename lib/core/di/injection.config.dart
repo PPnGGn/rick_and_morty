@@ -19,6 +19,12 @@ import 'package:rick_and_morty/data/datasources/characters/characters_local_data
     as _i633;
 import 'package:rick_and_morty/data/datasources/characters/characters_remote_datasource.dart'
     as _i405;
+import 'package:rick_and_morty/data/repositories/character_repository.dart'
+    as _i555;
+import 'package:rick_and_morty/domain/repositories/character_repository.dart'
+    as _i113;
+import 'package:rick_and_morty/domain/usecases/character_usecases.dart'
+    as _i892;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -36,6 +42,30 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i633.CharacterLocalDataSource>(
       () => _i633.CharacterLocalDataSource(gh<_i199.AppDatabase>()),
+    );
+    gh.lazySingleton<_i113.CharacterRepository>(
+      () => _i555.CharacterRepositoryImpl(
+        gh<_i405.CharactersRemoteDatasource>(),
+        gh<_i633.CharacterLocalDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i892.GetCharactersUseCase>(
+      () => _i892.GetCharactersUseCase(gh<_i113.CharacterRepository>()),
+    );
+    gh.lazySingleton<_i892.GetCharacterUseCase>(
+      () => _i892.GetCharacterUseCase(gh<_i113.CharacterRepository>()),
+    );
+    gh.lazySingleton<_i892.AddToFavoritesUseCase>(
+      () => _i892.AddToFavoritesUseCase(gh<_i113.CharacterRepository>()),
+    );
+    gh.lazySingleton<_i892.RemoveFromFavoritesUseCase>(
+      () => _i892.RemoveFromFavoritesUseCase(gh<_i113.CharacterRepository>()),
+    );
+    gh.lazySingleton<_i892.GetFavoritesUseCase>(
+      () => _i892.GetFavoritesUseCase(gh<_i113.CharacterRepository>()),
+    );
+    gh.lazySingleton<_i892.IsFavoriteUseCase>(
+      () => _i892.IsFavoriteUseCase(gh<_i113.CharacterRepository>()),
     );
     return this;
   }

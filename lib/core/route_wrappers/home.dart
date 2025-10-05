@@ -24,7 +24,7 @@ class HomeWrapperPage extends StatelessWidget {
           body: child,
           bottomNavigationBar: BottomNavigationBar(
             selectedItemColor: AppColors.primary,
-            unselectedItemColor: AppColors.onSurface,
+            unselectedItemColor: AppColors.text,
             unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.normal,
               fontFamily: "OpenSans",

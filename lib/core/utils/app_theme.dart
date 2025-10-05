@@ -1,83 +1,93 @@
-import "package:flutter/material.dart";
-import "package:rick_and_morty/core/utils/app_colors.dart";
+import 'package:flutter/material.dart';
+import 'package:rick_and_morty/core/utils/app_colors.dart';
 
-const Color primary = AppColors.primary;
-const Color surface = AppColors.surface;
-final ThemeData appTheme = ThemeData(
-  brightness: Brightness.dark,
+final ThemeData appLightTheme = ThemeData(
+  brightness: Brightness.light,
+  primaryColor: AppColors.primary,
+  scaffoldBackgroundColor: AppColors.background,
   appBarTheme: const AppBarTheme(
-    centerTitle: true,
+    backgroundColor: AppColors.background,
+    foregroundColor: AppColors.text,
     surfaceTintColor: Colors.transparent,
+    elevation: 1,
+    centerTitle: true,
     titleTextStyle: TextStyle(
       fontSize: 20,
-      fontWeight: FontWeight.w700,
-      color: AppColors.textColor,
+      fontWeight: FontWeight.bold,
+      color: AppColors.text,
+    ),
+    iconTheme: IconThemeData(color: AppColors.primary),
+  ),
+  colorScheme: ColorScheme.light(
+    primary: AppColors.primary,
+    secondary: AppColors.accent,
+    surface: AppColors.surface,
+    onPrimary: AppColors.surface,
+    onSecondary: AppColors.text,
+    onSurface: AppColors.text,
+  ),
+  cardTheme: const CardThemeData(
+    color: AppColors.card,
+    elevation: 3,
+    shadowColor: AppColors.divider,
+    margin: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(14)),
     ),
   ),
-  scaffoldBackgroundColor: AppColors.backgroundColor,
-  colorScheme: ColorScheme.fromSeed(
-    brightness: Brightness.dark,
-    seedColor: AppColors.blue3B82F6,
-    primary: primary,
-    surface: surface,
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: AppColors.primary,
+    foregroundColor: AppColors.card,
   ),
-
+  dividerColor: AppColors.divider,
   textTheme: const TextTheme(
     bodyMedium: TextStyle(
-      fontFamily: "OpenSans",
+      color: AppColors.text,
       fontSize: 14,
-      fontWeight: FontWeight.normal,
-      color: AppColors.textColor,
+      fontFamily: "OpenSans",
     ),
     bodyLarge: TextStyle(
+      color: AppColors.text,
       fontSize: 16,
+      fontWeight: FontWeight.w600,
       fontFamily: "OpenSans",
+    ),
+    titleLarge: TextStyle(
+      color: AppColors.primary,
+      fontSize: 22,
       fontWeight: FontWeight.bold,
-      color: AppColors.textColor,
     ),
   ),
-
-  filledButtonTheme: FilledButtonThemeData(
-    style: ButtonStyle(
-      minimumSize: WidgetStateProperty.all(const Size.fromHeight(36)),
-      padding: WidgetStateProperty.all(
-        const EdgeInsets.symmetric(vertical: 9.5),
-      ),
-      backgroundColor: WidgetStateProperty.all(AppColors.primary),
-      foregroundColor: WidgetStateProperty.all(AppColors.surface),
-      textStyle: WidgetStateProperty.all(
-        const TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: 14,
-          color: AppColors.grayFB,
-        ),
-      ),
-      shape: WidgetStateProperty.all(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
+  listTileTheme: const ListTileThemeData(
+    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    iconColor: AppColors.primary,
+    tileColor: AppColors.card,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
+    textColor: AppColors.text,
   ),
-
   inputDecorationTheme: InputDecorationTheme(
     fillColor: AppColors.surface,
-
+    filled: true,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16.0),
-      borderSide: const BorderSide(color: Colors.white),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16.0),
-      borderSide: const BorderSide(color: Colors.white),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16.0),
+      borderRadius: BorderRadius.circular(12.0),
       borderSide: BorderSide(color: AppColors.primary),
     ),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0),
+      borderSide: BorderSide(color: AppColors.divider),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0),
+      borderSide: BorderSide(color: AppColors.primary),
+    ),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
     hintStyle: const TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.normal,
-      color: AppColors.onSurface,
+      color: AppColors.textSecondary,
+      fontFamily: "OpenSans",
     ),
   ),
 );

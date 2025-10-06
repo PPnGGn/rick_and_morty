@@ -22,9 +22,7 @@ class SettingsPage extends StatelessWidget {
       body: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           return state.when(
-            initial: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
+            initial: () => const Center(child: CircularProgressIndicator()),
             loaded: (isDark) => ListView(
               padding: const EdgeInsets.all(16),
               children: [
@@ -37,7 +35,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                
+
                 // Карточка с переключателем темы
                 Card(
                   elevation: 2,
@@ -50,9 +48,7 @@ class SettingsPage extends StatelessWidget {
                       style: theme.textTheme.bodyLarge,
                     ),
                     subtitle: Text(
-                      isDark 
-                          ? 'Включена тёмная тема' 
-                          : 'Включена светлая тема',
+                      isDark ? 'Включена тёмная тема' : 'Включена светлая тема',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
@@ -68,9 +64,9 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Секция "О приложении"
                 Text(
                   'О приложении',
@@ -80,7 +76,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                
+
                 Card(
                   elevation: 2,
                   shape: RoundedRectangleBorder(
@@ -93,10 +89,7 @@ class SettingsPage extends StatelessWidget {
                           Icons.info_outline,
                           color: theme.colorScheme.primary,
                         ),
-                        title: Text(
-                          'Версия',
-                          style: theme.textTheme.bodyLarge,
-                        ),
+                        title: Text('Версия', style: theme.textTheme.bodyLarge),
                         subtitle: Text(
                           '1.0.0',
                           style: theme.textTheme.bodyMedium?.copyWith(
@@ -113,10 +106,7 @@ class SettingsPage extends StatelessWidget {
                           Icons.code,
                           color: theme.colorScheme.primary,
                         ),
-                        title: Text(
-                          'API',
-                          style: theme.textTheme.bodyLarge,
-                        ),
+                        title: Text('API', style: theme.textTheme.bodyLarge),
                         subtitle: Text(
                           'Rick and Morty API',
                           style: theme.textTheme.bodyMedium?.copyWith(

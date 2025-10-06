@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/core/di/injection.dart';
 import 'package:rick_and_morty/domain/enums/enums.dart';
 import 'package:rick_and_morty/ui/favorites/cubit/favorites_cubit.dart';
+import 'package:rick_and_morty/ui/characters/cubit/characters_cubit.dart';
 import 'package:rick_and_morty/ui/widgets/character_card.dart';
 
 @RoutePage()
@@ -140,9 +141,11 @@ class _FavoritesPageState extends State<FavoritesPage>
                                 isFavorite: true,
                                 onTap: () {},
                                 onFavoriteToggle: () {
-                                  _cubit
-                                      .removeFavorite(character.id)
-                                      .then((_) => _cubit.fetchFavorites());
+                                  _cubit.removeFavorite(character.id).then((_) {
+                                    // Нотифицируем экран персонажей, чтобы звезда сбросилась
+                                    getIt<CharactersCubit>()
+                                        .applyExternalFavoriteChange(character.id, false);
+                                  });
                                 },
                               );
                             },

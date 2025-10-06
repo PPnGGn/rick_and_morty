@@ -8,7 +8,7 @@ import 'package:rick_and_morty/domain/usecases/character_usecases.dart';
 part 'characters_state.dart';
 part 'characters_cubit.freezed.dart';
 
-@Injectable()
+@LazySingleton()
 class CharactersCubit extends Cubit<CharactersState> {
   final GetCharactersUseCase _getCharactersUseCase;
   final AddToFavoritesUseCase _addToFavoritesUseCase;
@@ -96,7 +96,8 @@ class CharactersCubit extends Cubit<CharactersState> {
 
       // Оптимистичное обновление UI
       _favoritesCache[character.id] = !isFav;
-      _updateCharactersState();
+      // Форсируем перерисовку списка, чтобы обновился цвет звезды
+      _updateCharactersState(forceRefresh: true);
 
       // Выполняем операцию с хранилищем
       if (isFav) {
@@ -109,7 +110,8 @@ class CharactersCubit extends Cubit<CharactersState> {
       _favoritesCache[character.id] = await _isFavoriteUseCase.call(
         character.id,
       );
-      _updateCharactersState();
+      // Гарантируем обновление UI после подтверждения статуса
+      _updateCharactersState(forceRefresh: true);
     } catch (e) {
       _updateCharactersState(forceRefresh: true);
       rethrow;
@@ -147,13 +149,19 @@ class CharactersCubit extends Cubit<CharactersState> {
   void _updateCharactersState({bool forceRefresh = false}) {
     state.maybeWhen(
       loaded: (characters) {
-        if (forceRefresh) {
-          emit(CharactersState.loaded([...characters]));
-        } else {
-          emit(CharactersState.loaded(characters));
-        }
+        // При forceRefresh создаем новую коллекцию, чтобы гарантировать rebuild
+        emit(CharactersState.loaded(
+          forceRefresh ? [...characters] : characters,
+        ));
       },
       orElse: () {},
     );
+  }
+
+  /// Применить внешнее изменение статуса избранного (например, с вкладки Избранное)
+  /// Обновляет внутренний кэш и форсирует перерисовку списка
+  void applyExternalFavoriteChange(int characterId, bool isFavorite) {
+    _favoritesCache[characterId] = isFavorite;
+    _updateCharactersState(forceRefresh: true);
   }
 }

@@ -92,7 +92,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i892.RemoveFromFavoritesUseCase>(),
       ),
     );
-    gh.factory<_i275.CharactersCubit>(
+    gh.lazySingleton<_i275.CharactersCubit>(
       () => _i275.CharactersCubit(
         gh<_i892.GetCharactersUseCase>(),
         gh<_i892.AddToFavoritesUseCase>(),

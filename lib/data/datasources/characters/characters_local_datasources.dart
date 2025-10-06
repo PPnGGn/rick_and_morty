@@ -13,79 +13,85 @@ class CharacterLocalDataSource {
 
   /// Кеширование персонажей из API (isFavorite всегда false!)
   Future<void> cacheCharacters(List<CharacterEntity> characters) async {
-  print('Начало кеширования персонажей, количество: ${characters.length}');
-  await _database.transaction(() async {
-    for (final character in characters) {
-      print('Пишем персонажа в БД: ${character.name} (id: ${character.id})');
-      final existing = await (_database.select(
-        _database.characters,
-      )..where((tbl) => tbl.id.equals(character.id))).getSingleOrNull();
-
-      if (existing != null) {
-        // Уже есть — обновляем, сохраняем статус избранного
-        print('Обновляем персонажа: ${character.name} (id: ${character.id})');
-        await (_database.update(
-          _database.characters,
-        )..where((tbl) => tbl.id.equals(character.id))).write(
-          CharactersCompanion(
-            name: Value(character.name),
-            status: Value(character.status.value),
-            species: Value(character.species),
-            type: Value(character.type),
-            gender: Value(character.gender.value),
-            originName: Value(character.origin?.name),
-            originUrl: Value(character.origin?.url),
-            locationName: Value(character.location?.name),
-            locationUrl: Value(character.location?.url),
-            image: Value(character.image),
-            episode: Value(character.episode.join(',')),
-            url: Value(character.url),
-            cachedAt: Value(DateTime.now()),
-            // НЕ трогаем isFavorite, оставляем как было!
-          ),
+    debugPrint(
+      'Начало кеширования персонажей, количество: ${characters.length}',
+    );
+    await _database.transaction(() async {
+      for (final character in characters) {
+        debugPrint(
+          'Пишем персонажа в БД: ${character.name} (id: ${character.id})',
         );
-      } else {
-        // Нет такого персонажа — добавляем как нового, НЕ избранного
-        debugPrint('Добавляем нового персонажа: ${character.name} (id: ${character.id})');
-        await _database
-            .into(_database.characters)
-            .insert(
-              CharactersCompanion(
-                id: Value(character.id),
-                name: Value(character.name),
-                status: Value(character.status.value),
-                species: Value(character.species),
-                type: Value(character.type),
-                gender: Value(character.gender.value),
-                originName: Value(character.origin?.name),
-                originUrl: Value(character.origin?.url),
-                locationName: Value(character.location?.name),
-                locationUrl: Value(character.location?.url),
-                image: Value(character.image),
-                episode: Value(character.episode.join(',')),
-                url: Value(character.url),
-                cachedAt: Value(DateTime.now()),
-                isFavorite: const Value(false), // Важно!
-              ),
-            );
-      }
-    }
-  });
-  debugPrint('✅ Завершено кеширование персонажей!');
-}
+        final existing = await (_database.select(
+          _database.characters,
+        )..where((tbl) => tbl.id.equals(character.id))).getSingleOrNull();
 
+        if (existing != null) {
+          // Уже есть — обновляем, сохраняем статус избранного
+          debugPrint(
+            'Обновляем персонажа: ${character.name} (id: ${character.id})',
+          );
+          await (_database.update(
+            _database.characters,
+          )..where((tbl) => tbl.id.equals(character.id))).write(
+            CharactersCompanion(
+              name: Value(character.name),
+              status: Value(character.status.value),
+              species: Value(character.species),
+              type: Value(character.type),
+              gender: Value(character.gender.value),
+              originName: Value(character.origin?.name),
+              originUrl: Value(character.origin?.url),
+              locationName: Value(character.location?.name),
+              locationUrl: Value(character.location?.url),
+              image: Value(character.image),
+              episode: Value(character.episode.join(',')),
+              url: Value(character.url),
+              cachedAt: Value(DateTime.now()),
+              // НЕ трогаем isFavorite, оставляем как было!
+            ),
+          );
+        } else {
+          // Нет такого персонажа — добавляем как нового, НЕ избранного
+          debugPrint(
+            'Добавляем нового персонажа: ${character.name} (id: ${character.id})',
+          );
+          await _database
+              .into(_database.characters)
+              .insert(
+                CharactersCompanion(
+                  id: Value(character.id),
+                  name: Value(character.name),
+                  status: Value(character.status.value),
+                  species: Value(character.species),
+                  type: Value(character.type),
+                  gender: Value(character.gender.value),
+                  originName: Value(character.origin?.name),
+                  originUrl: Value(character.origin?.url),
+                  locationName: Value(character.location?.name),
+                  locationUrl: Value(character.location?.url),
+                  image: Value(character.image),
+                  episode: Value(character.episode.join(',')),
+                  url: Value(character.url),
+                  cachedAt: Value(DateTime.now()),
+                  isFavorite: const Value(false), // Важно!
+                ),
+              );
+        }
+      }
+    });
+    debugPrint('Завершено кеширование персонажей!');
+  }
 
   /// Получить всех персонажей из кеша
- Future<List<CharacterEntity>> getCachedCharacters() async {
-  debugPrint('Извлекаем персонажей из кеша...');
-  final rows = await _database.select(_database.characters).get();
-  debugPrint('Найдено в кеше персонажей: ${rows.length}');
-  if (rows.isNotEmpty) {
-    debugPrint('Первый персонаж из кеша: ${rows.first.name}');
+  Future<List<CharacterEntity>> getCachedCharacters() async {
+    debugPrint('Достаем персонажей из кеша...');
+    final rows = await _database.select(_database.characters).get();
+    debugPrint('Найдено в кеше персонажей: ${rows.length}');
+    if (rows.isNotEmpty) {
+      debugPrint('Первый персонаж из кеша: ${rows.first.name}');
+    }
+    return rows.map((row) => _mapToEntity(row)).toList();
   }
-  return rows.map((row) => _mapToEntity(row)).toList();
-}
-
 
   /// Получить персонажа из кеша по id
   Future<CharacterEntity?> getCachedCharacter(int id) async {

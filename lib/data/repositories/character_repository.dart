@@ -20,7 +20,7 @@ class CharacterRepositoryImpl implements CharacterRepository {
     String? status,
   }) async {
     try {
-      debugPrint('🌐 Пытаемся загрузить из сети...');
+      debugPrint('Загрузка из сети');
       final response = await _remote.getAllCharacters(
         page: page,
         name: name,
@@ -29,23 +29,23 @@ class CharacterRepositoryImpl implements CharacterRepository {
       final characters = response.results
           .map((model) => model.toEntity())
           .toList();
-      debugPrint('🌐 Загружено из сети: ${characters.length} персонажей');
+      debugPrint('Загружено из сети: ${characters.length} персонажей');
 
       // Кешируем только первую страницу без фильтров
       if (page == 1 && name == null && status == null) {
-        debugPrint('💾 Кешируем данные...');
+        debugPrint('Кешируем данные');
         await _local.cacheCharacters(characters);
       }
       return characters;
     } catch (e) {
-      debugPrint('❌ Ошибка загрузки из сети: $e');
-      debugPrint('📱 Пробуем загрузить из кеша...');
+      debugPrint('Ошибка загрузки из сети: $e');
+      debugPrint('Пробуем загрузить из кеша');
       final cached = await _local.getCachedCharacters();
       if (cached.isEmpty) {
-        debugPrint('❌ Кеш пуст!');
+        debugPrint('Кеш пустой!');
         throw Exception('Нет интернета и кеш пуст');
       }
-      debugPrint('✅ Загружено из кеша: ${cached.length} персонажей');
+      debugPrint('Загружено из кеша: ${cached.length} персонажей');
       return cached;
     }
   }
@@ -58,7 +58,7 @@ class CharacterRepositoryImpl implements CharacterRepository {
       await _local.cacheCharacters([entity]);
       return entity;
     } catch (e) {
-      debugPrint('Ошибка сети! Загружаем персонажа из кеша: $e');
+      debugPrint('Ошибка сети. Загружаем персонажа из кеша: $e');
       return await _local.getCachedCharacter(id);
     }
   }

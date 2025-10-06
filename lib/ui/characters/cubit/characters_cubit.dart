@@ -15,6 +15,12 @@ class CharactersCubit extends Cubit<CharactersState> {
   final RemoveFromFavoritesUseCase _removeFromFavoritesUseCase;
   final IsFavoriteUseCase _isFavoriteUseCase;
 
+  // Пагинация и кэш
+  int _currentPage = 1;
+  bool _isLoadingNextPage = false;
+  bool _hasMore = true;
+  List<CharacterEntity> _allCharacters = [];
+
   // Кэш для хранения статуса избранного
   final Map<int, bool> _favoritesCache = {};
 
@@ -25,20 +31,63 @@ class CharactersCubit extends Cubit<CharactersState> {
     this._isFavoriteUseCase,
   ) : super(const CharactersState.initial());
 
-  Future<void> fetchCharacters() async {
+  Future<void> fetchCharacters({bool refresh = false}) async {
     debugPrint('Cubit: Начинаем загрузку персонажей...');
-    emit(const CharactersState.loading());
+    
+    if (refresh) {
+      _currentPage = 1;
+      _allCharacters = [];
+      _hasMore = true;
+    } else if (_isLoadingNextPage || !_hasMore) {
+      return; // Уже загружаем или больше нечего грузить
+    }
+    
+    _isLoadingNextPage = true;
+    
     try {
-      final characters = await _getCharactersUseCase.call();
-      debugPrint('Cubit: Получено персонажей: ${characters.length}');
-      // Обновляем кэш избранных
-      await _updateFavoritesCache(characters);
-      emit(CharactersState.loaded(characters));
-      debugPrint('Cubit: Состояние обновлено на loaded');
+      if (_currentPage == 1) {
+        emit(const CharactersState.loading());
+      }
+      
+      debugPrint('Cubit: Загрузка страницы $_currentPage');
+      final characters = await _getCharactersUseCase.call(page: _currentPage);
+      
+      // Обновляем флаг hasMore на основе количества полученных записей
+      _hasMore = characters.length == 20; // Если получили 20 записей, возможно, есть еще
+      
+      debugPrint('Cubit: Получено ${characters.length} персонажей. Есть еще данные: $_hasMore');
+      
+      // Обновляем список персонажей
+      _allCharacters = _currentPage == 1 
+          ? characters 
+          : [..._allCharacters, ...characters];
+      
+      await _updateFavoritesCache(_allCharacters);
+      
+      // Обновляем состояние
+      emit(CharactersState.loaded(_allCharacters));
+      
+      // Увеличиваем номер страницы только после успешной загрузки
+      _currentPage++;
+      
     } catch (e) {
       debugPrint('Cubit: Ошибка загрузки: $e');
       emit(CharactersState.error(e.toString()));
+    } finally {
+      _isLoadingNextPage = false;
     }
+  }
+
+  Future<void> loadMoreCharacters() async {
+    // Используем fetchCharacters для загрузки следующей страницы
+    // чтобы избежать дублирования кода
+    if (_currentPage > 1) {
+      await fetchCharacters();
+    }
+  }
+
+  Future<void> refreshCharacters() async {
+    await fetchCharacters(refresh: true);
   }
 
   Future<void> toggleFavorite(CharacterEntity character) async {
@@ -56,13 +105,12 @@ class CharactersCubit extends Cubit<CharactersState> {
         await _addToFavoritesUseCase.call(character);
       }
 
-      // Обновляем кэш на случай, если что-то пошло не так
+      // Обновляем кэш на случай ошибки
       _favoritesCache[character.id] = await _isFavoriteUseCase.call(
         character.id,
       );
       _updateCharactersState();
     } catch (e) {
-      // В случае ошибки обновляем состояние, чтобы отобразить актуальные данные
       _updateCharactersState(forceRefresh: true);
       rethrow;
     }
@@ -72,7 +120,6 @@ class CharactersCubit extends Cubit<CharactersState> {
     if (_favoritesCache.containsKey(characterId)) {
       return _favoritesCache[characterId]!;
     }
-
     try {
       final isFav = await _isFavoriteUseCase.call(characterId);
       _favoritesCache[characterId] = isFav;
@@ -101,10 +148,8 @@ class CharactersCubit extends Cubit<CharactersState> {
     state.maybeWhen(
       loaded: (characters) {
         if (forceRefresh) {
-          // Если нужно принудительное обновление, обновляем весь список
           emit(CharactersState.loaded([...characters]));
         } else {
-          // Иначе просто уведомляем об изменении состояния
           emit(CharactersState.loaded(characters));
         }
       },

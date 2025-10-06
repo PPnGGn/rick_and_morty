@@ -1,6 +1,7 @@
 import "package:auto_route/auto_route.dart";
+import "package:injectable/injectable.dart";
 import "package:rick_and_morty/core/router/app_router.gr.dart";
-
+@Singleton()
 @AutoRouterConfig(replaceInRouteName: "Screen|Page,Route")
 class AppRouter extends RootStackRouter {
   @override

@@ -14,7 +14,6 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:rick_and_morty/core/database/database.dart' as _i199;
 import 'package:rick_and_morty/core/database/database_module.dart' as _i671;
-import 'package:rick_and_morty/core/di/app_module.dart' as _i625;
 import 'package:rick_and_morty/core/network/network_module.dart' as _i450;
 import 'package:rick_and_morty/core/router/app_router.dart' as _i1004;
 import 'package:rick_and_morty/data/datasources/characters/characters_local_datasources.dart'
@@ -40,11 +39,10 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    final appModule = _$AppModule();
     final dBModule = _$DBModule();
     final networkModule = _$NetworkModule();
     gh.factory<_i1033.SettingsCubit>(() => _i1033.SettingsCubit());
-    gh.singleton<_i1004.AppRouter>(() => appModule.appRouter());
+    gh.singleton<_i1004.AppRouter>(() => _i1004.AppRouter());
     gh.lazySingleton<_i199.AppDatabase>(() => dBModule.appDatabase());
     gh.lazySingleton<_i361.Dio>(() => networkModule.dio());
     gh.lazySingleton<_i405.CharactersRemoteDatasource>(
@@ -103,8 +101,6 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
-
-class _$AppModule extends _i625.AppModule {}
 
 class _$DBModule extends _i671.DBModule {}
 

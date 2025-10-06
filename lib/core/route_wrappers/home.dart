@@ -23,18 +23,22 @@ class HomeWrapperPage extends StatelessWidget {
         return Scaffold(
           body: child,
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: AppColors.primary,
-            unselectedItemColor: AppColors.text,
-            unselectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.normal,
-              fontFamily: "OpenSans",
-              fontSize: 14,
-            ),
-            selectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.normal,
-              fontFamily: "OpenSans",
-              fontSize: 14,
-            ),
+            selectedItemColor: Theme.of(
+              context,
+            ).bottomNavigationBarTheme.selectedItemColor,
+            unselectedItemColor: Theme.of(
+              context,
+            ).bottomNavigationBarTheme.unselectedItemColor,
+            backgroundColor: Theme.of(
+              context,
+            ).bottomNavigationBarTheme.backgroundColor,
+            unselectedLabelStyle: Theme.of(context).textTheme.bodyMedium,
+            selectedLabelStyle: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(
+                  color: Theme.of(
+                    context,
+                  ).bottomNavigationBarTheme.selectedItemColor,
+                ),
             currentIndex: tabsRouter.activeIndex,
             type: BottomNavigationBarType.fixed,
             showSelectedLabels: true,
@@ -45,14 +49,12 @@ class HomeWrapperPage extends StatelessWidget {
             items: const [
               BottomNavigationBarItem(
                 label: "Персонажи",
-
                 icon: Icon(Icons.person),
               ),
               BottomNavigationBarItem(
                 label: "Избранное",
                 icon: Icon(Icons.star),
               ),
-
               BottomNavigationBarItem(
                 label: "Настройки",
                 icon: Icon(Icons.settings),

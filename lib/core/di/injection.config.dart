@@ -14,7 +14,9 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:rick_and_morty/core/database/database.dart' as _i199;
 import 'package:rick_and_morty/core/database/database_module.dart' as _i671;
+import 'package:rick_and_morty/core/di/app_module.dart' as _i625;
 import 'package:rick_and_morty/core/network/network_module.dart' as _i450;
+import 'package:rick_and_morty/core/router/app_router.dart' as _i1004;
 import 'package:rick_and_morty/data/datasources/characters/characters_local_datasources.dart'
     as _i633;
 import 'package:rick_and_morty/data/datasources/characters/characters_remote_datasource.dart'
@@ -29,6 +31,7 @@ import 'package:rick_and_morty/ui/characters/cubit/characters_cubit.dart'
     as _i275;
 import 'package:rick_and_morty/ui/favorites/cubit/favorites_cubit.dart'
     as _i853;
+import 'package:rick_and_morty/ui/settings/cubit/settings_cubit.dart' as _i1033;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -37,10 +40,13 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    final networkModule = _$NetworkModule();
+    final appModule = _$AppModule();
     final dBModule = _$DBModule();
-    gh.lazySingleton<_i361.Dio>(() => networkModule.dio());
+    final networkModule = _$NetworkModule();
+    gh.factory<_i1033.SettingsCubit>(() => _i1033.SettingsCubit());
+    gh.singleton<_i1004.AppRouter>(() => appModule.appRouter());
     gh.lazySingleton<_i199.AppDatabase>(() => dBModule.appDatabase());
+    gh.lazySingleton<_i361.Dio>(() => networkModule.dio());
     gh.lazySingleton<_i405.CharactersRemoteDatasource>(
       () => networkModule.charactersRemoteDatasource(gh<_i361.Dio>()),
     );
@@ -58,6 +64,15 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i892.GetCharacterUseCase>(
       () => _i892.GetCharacterUseCase(gh<_i113.CharacterRepository>()),
+    );
+    gh.lazySingleton<_i892.RefreshCharactersUseCase>(
+      () => _i892.RefreshCharactersUseCase(gh<_i113.CharacterRepository>()),
+    );
+    gh.lazySingleton<_i892.ClearCacheUseCase>(
+      () => _i892.ClearCacheUseCase(gh<_i113.CharacterRepository>()),
+    );
+    gh.lazySingleton<_i892.HasCachedDataUseCase>(
+      () => _i892.HasCachedDataUseCase(gh<_i113.CharacterRepository>()),
     );
     gh.lazySingleton<_i892.AddToFavoritesUseCase>(
       () => _i892.AddToFavoritesUseCase(gh<_i113.CharacterRepository>()),
@@ -89,6 +104,8 @@ extension GetItInjectableX on _i174.GetIt {
   }
 }
 
-class _$NetworkModule extends _i450.NetworkModule {}
+class _$AppModule extends _i625.AppModule {}
 
 class _$DBModule extends _i671.DBModule {}
+
+class _$NetworkModule extends _i450.NetworkModule {}

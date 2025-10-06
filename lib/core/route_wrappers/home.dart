@@ -49,8 +49,8 @@ class HomeWrapperPage extends StatelessWidget {
                 icon: Icon(Icons.person),
               ),
               BottomNavigationBarItem(
-                label: "Избраное",
-                icon: Icon(Icons.favorite),
+                label: "Избранное",
+                icon: Icon(Icons.star),
               ),
 
               BottomNavigationBarItem(

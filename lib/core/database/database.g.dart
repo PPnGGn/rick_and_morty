@@ -153,6 +153,18 @@ class $CharactersTable extends Characters
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _cachedAtMeta = const VerificationMeta(
+    'cachedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> cachedAt = GeneratedColumn<DateTime>(
+    'cached_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -169,6 +181,7 @@ class $CharactersTable extends Characters
     episode,
     url,
     isFavorite,
+    cachedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -277,6 +290,12 @@ class $CharactersTable extends Characters
         isFavorite.isAcceptableOrUnknown(data['is_favorite']!, _isFavoriteMeta),
       );
     }
+    if (data.containsKey('cached_at')) {
+      context.handle(
+        _cachedAtMeta,
+        cachedAt.isAcceptableOrUnknown(data['cached_at']!, _cachedAtMeta),
+      );
+    }
     return context;
   }
 
@@ -342,6 +361,10 @@ class $CharactersTable extends Characters
         DriftSqlType.bool,
         data['${effectivePrefix}is_favorite'],
       )!,
+      cachedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}cached_at'],
+      )!,
     );
   }
 
@@ -366,6 +389,7 @@ class Character extends DataClass implements Insertable<Character> {
   final String? episode;
   final String? url;
   final bool isFavorite;
+  final DateTime cachedAt;
   const Character({
     required this.id,
     required this.name,
@@ -381,6 +405,7 @@ class Character extends DataClass implements Insertable<Character> {
     this.episode,
     this.url,
     required this.isFavorite,
+    required this.cachedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -415,6 +440,7 @@ class Character extends DataClass implements Insertable<Character> {
       map['url'] = Variable<String>(url);
     }
     map['is_favorite'] = Variable<bool>(isFavorite);
+    map['cached_at'] = Variable<DateTime>(cachedAt);
     return map;
   }
 
@@ -446,6 +472,7 @@ class Character extends DataClass implements Insertable<Character> {
           : Value(episode),
       url: url == null && nullToAbsent ? const Value.absent() : Value(url),
       isFavorite: Value(isFavorite),
+      cachedAt: Value(cachedAt),
     );
   }
 
@@ -469,6 +496,7 @@ class Character extends DataClass implements Insertable<Character> {
       episode: serializer.fromJson<String?>(json['episode']),
       url: serializer.fromJson<String?>(json['url']),
       isFavorite: serializer.fromJson<bool>(json['isFavorite']),
+      cachedAt: serializer.fromJson<DateTime>(json['cachedAt']),
     );
   }
   @override
@@ -489,6 +517,7 @@ class Character extends DataClass implements Insertable<Character> {
       'episode': serializer.toJson<String?>(episode),
       'url': serializer.toJson<String?>(url),
       'isFavorite': serializer.toJson<bool>(isFavorite),
+      'cachedAt': serializer.toJson<DateTime>(cachedAt),
     };
   }
 
@@ -507,6 +536,7 @@ class Character extends DataClass implements Insertable<Character> {
     Value<String?> episode = const Value.absent(),
     Value<String?> url = const Value.absent(),
     bool? isFavorite,
+    DateTime? cachedAt,
   }) => Character(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -522,6 +552,7 @@ class Character extends DataClass implements Insertable<Character> {
     episode: episode.present ? episode.value : this.episode,
     url: url.present ? url.value : this.url,
     isFavorite: isFavorite ?? this.isFavorite,
+    cachedAt: cachedAt ?? this.cachedAt,
   );
   Character copyWithCompanion(CharactersCompanion data) {
     return Character(
@@ -547,6 +578,7 @@ class Character extends DataClass implements Insertable<Character> {
       isFavorite: data.isFavorite.present
           ? data.isFavorite.value
           : this.isFavorite,
+      cachedAt: data.cachedAt.present ? data.cachedAt.value : this.cachedAt,
     );
   }
 
@@ -566,7 +598,8 @@ class Character extends DataClass implements Insertable<Character> {
           ..write('image: $image, ')
           ..write('episode: $episode, ')
           ..write('url: $url, ')
-          ..write('isFavorite: $isFavorite')
+          ..write('isFavorite: $isFavorite, ')
+          ..write('cachedAt: $cachedAt')
           ..write(')'))
         .toString();
   }
@@ -587,6 +620,7 @@ class Character extends DataClass implements Insertable<Character> {
     episode,
     url,
     isFavorite,
+    cachedAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -605,7 +639,8 @@ class Character extends DataClass implements Insertable<Character> {
           other.image == this.image &&
           other.episode == this.episode &&
           other.url == this.url &&
-          other.isFavorite == this.isFavorite);
+          other.isFavorite == this.isFavorite &&
+          other.cachedAt == this.cachedAt);
 }
 
 class CharactersCompanion extends UpdateCompanion<Character> {
@@ -623,6 +658,7 @@ class CharactersCompanion extends UpdateCompanion<Character> {
   final Value<String?> episode;
   final Value<String?> url;
   final Value<bool> isFavorite;
+  final Value<DateTime> cachedAt;
   const CharactersCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -638,6 +674,7 @@ class CharactersCompanion extends UpdateCompanion<Character> {
     this.episode = const Value.absent(),
     this.url = const Value.absent(),
     this.isFavorite = const Value.absent(),
+    this.cachedAt = const Value.absent(),
   });
   CharactersCompanion.insert({
     this.id = const Value.absent(),
@@ -654,6 +691,7 @@ class CharactersCompanion extends UpdateCompanion<Character> {
     this.episode = const Value.absent(),
     this.url = const Value.absent(),
     this.isFavorite = const Value.absent(),
+    this.cachedAt = const Value.absent(),
   }) : name = Value(name),
        status = Value(status),
        gender = Value(gender),
@@ -673,6 +711,7 @@ class CharactersCompanion extends UpdateCompanion<Character> {
     Expression<String>? episode,
     Expression<String>? url,
     Expression<bool>? isFavorite,
+    Expression<DateTime>? cachedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -689,6 +728,7 @@ class CharactersCompanion extends UpdateCompanion<Character> {
       if (episode != null) 'episode': episode,
       if (url != null) 'url': url,
       if (isFavorite != null) 'is_favorite': isFavorite,
+      if (cachedAt != null) 'cached_at': cachedAt,
     });
   }
 
@@ -707,6 +747,7 @@ class CharactersCompanion extends UpdateCompanion<Character> {
     Value<String?>? episode,
     Value<String?>? url,
     Value<bool>? isFavorite,
+    Value<DateTime>? cachedAt,
   }) {
     return CharactersCompanion(
       id: id ?? this.id,
@@ -723,6 +764,7 @@ class CharactersCompanion extends UpdateCompanion<Character> {
       episode: episode ?? this.episode,
       url: url ?? this.url,
       isFavorite: isFavorite ?? this.isFavorite,
+      cachedAt: cachedAt ?? this.cachedAt,
     );
   }
 
@@ -771,6 +813,9 @@ class CharactersCompanion extends UpdateCompanion<Character> {
     if (isFavorite.present) {
       map['is_favorite'] = Variable<bool>(isFavorite.value);
     }
+    if (cachedAt.present) {
+      map['cached_at'] = Variable<DateTime>(cachedAt.value);
+    }
     return map;
   }
 
@@ -790,7 +835,8 @@ class CharactersCompanion extends UpdateCompanion<Character> {
           ..write('image: $image, ')
           ..write('episode: $episode, ')
           ..write('url: $url, ')
-          ..write('isFavorite: $isFavorite')
+          ..write('isFavorite: $isFavorite, ')
+          ..write('cachedAt: $cachedAt')
           ..write(')'))
         .toString();
   }
@@ -823,6 +869,7 @@ typedef $$CharactersTableCreateCompanionBuilder =
       Value<String?> episode,
       Value<String?> url,
       Value<bool> isFavorite,
+      Value<DateTime> cachedAt,
     });
 typedef $$CharactersTableUpdateCompanionBuilder =
     CharactersCompanion Function({
@@ -840,6 +887,7 @@ typedef $$CharactersTableUpdateCompanionBuilder =
       Value<String?> episode,
       Value<String?> url,
       Value<bool> isFavorite,
+      Value<DateTime> cachedAt,
     });
 
 class $$CharactersTableFilterComposer
@@ -918,6 +966,11 @@ class $$CharactersTableFilterComposer
 
   ColumnFilters<bool> get isFavorite => $composableBuilder(
     column: $table.isFavorite,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get cachedAt => $composableBuilder(
+    column: $table.cachedAt,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1000,6 +1053,11 @@ class $$CharactersTableOrderingComposer
     column: $table.isFavorite,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get cachedAt => $composableBuilder(
+    column: $table.cachedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$CharactersTableAnnotationComposer
@@ -1060,6 +1118,9 @@ class $$CharactersTableAnnotationComposer
     column: $table.isFavorite,
     builder: (column) => column,
   );
+
+  GeneratedColumn<DateTime> get cachedAt =>
+      $composableBuilder(column: $table.cachedAt, builder: (column) => column);
 }
 
 class $$CharactersTableTableManager
@@ -1107,6 +1168,7 @@ class $$CharactersTableTableManager
                 Value<String?> episode = const Value.absent(),
                 Value<String?> url = const Value.absent(),
                 Value<bool> isFavorite = const Value.absent(),
+                Value<DateTime> cachedAt = const Value.absent(),
               }) => CharactersCompanion(
                 id: id,
                 name: name,
@@ -1122,6 +1184,7 @@ class $$CharactersTableTableManager
                 episode: episode,
                 url: url,
                 isFavorite: isFavorite,
+                cachedAt: cachedAt,
               ),
           createCompanionCallback:
               ({
@@ -1139,6 +1202,7 @@ class $$CharactersTableTableManager
                 Value<String?> episode = const Value.absent(),
                 Value<String?> url = const Value.absent(),
                 Value<bool> isFavorite = const Value.absent(),
+                Value<DateTime> cachedAt = const Value.absent(),
               }) => CharactersCompanion.insert(
                 id: id,
                 name: name,
@@ -1154,6 +1218,7 @@ class $$CharactersTableTableManager
                 episode: episode,
                 url: url,
                 isFavorite: isFavorite,
+                cachedAt: cachedAt,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

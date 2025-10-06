@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:rick_and_morty/core/utils/app_colors.dart';
 import 'package:rick_and_morty/domain/entities/entities.dart';
 
 class CharacterCard extends StatelessWidget {
@@ -33,12 +35,12 @@ class CharacterCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  character.image,
+                child: CachedNetworkImage(
+                  imageUrl: character.image,
                   width: 68,
                   height: 68,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
+                  errorWidget: (context, error, stackTrace) => Container(
                     color: theme.colorScheme.primary.withOpacity(0.08),
                     width: 68,
                     height: 68,
@@ -103,10 +105,10 @@ class CharacterCard extends StatelessWidget {
                   transitionBuilder: (child, animation) =>
                       ScaleTransition(scale: animation, child: child),
                   child: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_outline,
+                    isFavorite ? Icons.star : Icons.star_outline,
                     key: ValueKey(isFavorite),
                     color: isFavorite
-                        ? Colors.redAccent
+                        ? AppColors.primary
                         : theme.colorScheme.primary,
                     size: 28,
                   ),

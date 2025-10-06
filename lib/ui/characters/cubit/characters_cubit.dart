@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -25,13 +26,17 @@ class CharactersCubit extends Cubit<CharactersState> {
   ) : super(const CharactersState.initial());
 
   Future<void> fetchCharacters() async {
+    debugPrint('Cubit: Начинаем загрузку персонажей...');
     emit(const CharactersState.loading());
     try {
       final characters = await _getCharactersUseCase.call();
+      debugPrint('Cubit: Получено персонажей: ${characters.length}');
       // Обновляем кэш избранных
       await _updateFavoritesCache(characters);
       emit(CharactersState.loaded(characters));
+      debugPrint('Cubit: Состояние обновлено на loaded');
     } catch (e) {
+      debugPrint('Cubit: Ошибка загрузки: $e');
       emit(CharactersState.error(e.toString()));
     }
   }

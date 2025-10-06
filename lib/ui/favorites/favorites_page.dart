@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:rick_and_morty/core/di/injection.dart';
 import 'package:rick_and_morty/domain/enums/enums.dart';
 import 'package:rick_and_morty/ui/favorites/cubit/favorites_cubit.dart';
@@ -142,9 +143,8 @@ class _FavoritesPageState extends State<FavoritesPage>
                                 onTap: () {},
                                 onFavoriteToggle: () {
                                   _cubit.removeFavorite(character.id).then((_) {
-                                    // Нотифицируем экран персонажей, чтобы звезда сбросилась
-                                    getIt<CharactersCubit>()
-                                        .applyExternalFavoriteChange(character.id, false);
+                                    GetIt.instance<CharactersCubit>()
+                                        .refreshCharacters();
                                   });
                                 },
                               );

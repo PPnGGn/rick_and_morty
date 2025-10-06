@@ -128,12 +128,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<CharacterEntity> characters)?  loaded,TResult Function( String error)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<CharacterEntity> characters,  Map<int, bool> favoritesCache)?  loaded,TResult Function( String error)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Loaded() when loaded != null:
-return loaded(_that.characters);case _Error() when error != null:
+return loaded(_that.characters,_that.favoritesCache);case _Error() when error != null:
 return error(_that.error);case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return error(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<CharacterEntity> characters)  loaded,required TResult Function( String error)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<CharacterEntity> characters,  Map<int, bool> favoritesCache)  loaded,required TResult Function( String error)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _Loaded():
-return loaded(_that.characters);case _Error():
+return loaded(_that.characters,_that.favoritesCache);case _Error():
 return error(_that.error);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return error(_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<CharacterEntity> characters)?  loaded,TResult? Function( String error)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<CharacterEntity> characters,  Map<int, bool> favoritesCache)?  loaded,TResult? Function( String error)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _Loaded() when loaded != null:
-return loaded(_that.characters);case _Error() when error != null:
+return loaded(_that.characters,_that.favoritesCache);case _Error() when error != null:
 return error(_that.error);case _:
   return null;
 
@@ -257,7 +257,7 @@ String toString() {
 
 
 class _Loaded implements CharactersState {
-  const _Loaded(final  List<CharacterEntity> characters): _characters = characters;
+  const _Loaded(final  List<CharacterEntity> characters, final  Map<int, bool> favoritesCache): _characters = characters,_favoritesCache = favoritesCache;
   
 
  final  List<CharacterEntity> _characters;
@@ -265,6 +265,13 @@ class _Loaded implements CharactersState {
   if (_characters is EqualUnmodifiableListView) return _characters;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_characters);
+}
+
+ final  Map<int, bool> _favoritesCache;
+ Map<int, bool> get favoritesCache {
+  if (_favoritesCache is EqualUnmodifiableMapView) return _favoritesCache;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_favoritesCache);
 }
 
 
@@ -278,16 +285,16 @@ _$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._characters, _characters));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._characters, _characters)&&const DeepCollectionEquality().equals(other._favoritesCache, _favoritesCache));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_characters));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_characters),const DeepCollectionEquality().hash(_favoritesCache));
 
 @override
 String toString() {
-  return 'CharactersState.loaded(characters: $characters)';
+  return 'CharactersState.loaded(characters: $characters, favoritesCache: $favoritesCache)';
 }
 
 
@@ -298,7 +305,7 @@ abstract mixin class _$LoadedCopyWith<$Res> implements $CharactersStateCopyWith<
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
 @useResult
 $Res call({
- List<CharacterEntity> characters
+ List<CharacterEntity> characters, Map<int, bool> favoritesCache
 });
 
 
@@ -315,10 +322,11 @@ class __$LoadedCopyWithImpl<$Res>
 
 /// Create a copy of CharactersState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? characters = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? characters = null,Object? favoritesCache = null,}) {
   return _then(_Loaded(
 null == characters ? _self._characters : characters // ignore: cast_nullable_to_non_nullable
-as List<CharacterEntity>,
+as List<CharacterEntity>,null == favoritesCache ? _self._favoritesCache : favoritesCache // ignore: cast_nullable_to_non_nullable
+as Map<int, bool>,
   ));
 }
 

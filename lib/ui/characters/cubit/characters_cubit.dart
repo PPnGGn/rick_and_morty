@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -15,13 +14,10 @@ class CharactersCubit extends Cubit<CharactersState> {
   final RemoveFromFavoritesUseCase _removeFromFavoritesUseCase;
   final IsFavoriteUseCase _isFavoriteUseCase;
 
-  // Пагинация и кэш
   int _currentPage = 1;
   bool _isLoadingNextPage = false;
   bool _hasMore = true;
   List<CharacterEntity> _allCharacters = [];
-
-  // Кэш для хранения статуса избранного
   final Map<int, bool> _favoritesCache = {};
 
   CharactersCubit(
@@ -32,46 +28,29 @@ class CharactersCubit extends Cubit<CharactersState> {
   ) : super(const CharactersState.initial());
 
   Future<void> fetchCharacters({bool refresh = false}) async {
-    debugPrint('Cubit: Начинаем загрузку персонажей...');
-    
     if (refresh) {
       _currentPage = 1;
       _allCharacters = [];
       _hasMore = true;
     } else if (_isLoadingNextPage || !_hasMore) {
-      return; // Уже загружаем или больше нечего грузить
+      return;
     }
-    
     _isLoadingNextPage = true;
-    
     try {
       if (_currentPage == 1) {
         emit(const CharactersState.loading());
       }
-      
-      debugPrint('Cubit: Загрузка страницы $_currentPage');
       final characters = await _getCharactersUseCase.call(page: _currentPage);
-      
-      // Обновляем флаг hasMore на основе количества полученных записей
-      _hasMore = characters.length == 20; // Если получили 20 записей, возможно, есть еще
-      
-      debugPrint('Cubit: Получено ${characters.length} персонажей. Есть еще данные: $_hasMore');
-      
-      // Обновляем список персонажей
-      _allCharacters = _currentPage == 1 
-          ? characters 
+      _hasMore = characters.length == 20;
+      _allCharacters = _currentPage == 1
+          ? characters
           : [..._allCharacters, ...characters];
-      
+
+      // Актуализируем статус избранного для всех видимых персонажей
       await _updateFavoritesCache(_allCharacters);
-      
-      // Обновляем состояние
-      emit(CharactersState.loaded(_allCharacters));
-      
-      // Увеличиваем номер страницы только после успешной загрузки
+      emit(CharactersState.loaded(_allCharacters, Map.of(_favoritesCache)));
       _currentPage++;
-      
     } catch (e) {
-      debugPrint('Cubit: Ошибка загрузки: $e');
       emit(CharactersState.error(e.toString()));
     } finally {
       _isLoadingNextPage = false;
@@ -79,8 +58,6 @@ class CharactersCubit extends Cubit<CharactersState> {
   }
 
   Future<void> loadMoreCharacters() async {
-    // Используем fetchCharacters для загрузки следующей страницы
-    // чтобы избежать дублирования кода
     if (_currentPage > 1) {
       await fetchCharacters();
     }
@@ -96,72 +73,27 @@ class CharactersCubit extends Cubit<CharactersState> {
 
       // Оптимистичное обновление UI
       _favoritesCache[character.id] = !isFav;
-      // Форсируем перерисовку списка, чтобы обновился цвет звезды
-      _updateCharactersState(forceRefresh: true);
+      emit(CharactersState.loaded(_allCharacters, Map.of(_favoritesCache)));
 
-      // Выполняем операцию с хранилищем
+      // Операция в базе
       if (isFav) {
         await _removeFromFavoritesUseCase.call(character.id);
       } else {
         await _addToFavoritesUseCase.call(character);
       }
 
-      // Обновляем кэш на случай ошибки
-      _favoritesCache[character.id] = await _isFavoriteUseCase.call(
-        character.id,
-      );
-      // Гарантируем обновление UI после подтверждения статуса
-      _updateCharactersState(forceRefresh: true);
+      // Перезапрос актуального статуса из локального источника
+      _favoritesCache[character.id] = await _isFavoriteUseCase.call(character.id);
+      emit(CharactersState.loaded(_allCharacters, Map.of(_favoritesCache)));
     } catch (e) {
-      _updateCharactersState(forceRefresh: true);
+      emit(CharactersState.loaded(_allCharacters, Map.of(_favoritesCache)));
       rethrow;
     }
   }
 
-  Future<bool> isFavorite(int characterId) async {
-    if (_favoritesCache.containsKey(characterId)) {
-      return _favoritesCache[characterId]!;
-    }
-    try {
-      final isFav = await _isFavoriteUseCase.call(characterId);
-      _favoritesCache[characterId] = isFav;
-      return isFav;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  /// Синхронное получение статуса избранного из кэша
-  bool? isFavoriteSync(int characterId) {
-    return _favoritesCache[characterId];
-  }
-
   Future<void> _updateFavoritesCache(List<CharacterEntity> characters) async {
     for (final character in characters) {
-      if (!_favoritesCache.containsKey(character.id)) {
-        _favoritesCache[character.id] = await _isFavoriteUseCase.call(
-          character.id,
-        );
-      }
+      _favoritesCache[character.id] = await _isFavoriteUseCase.call(character.id);
     }
-  }
-
-  void _updateCharactersState({bool forceRefresh = false}) {
-    state.maybeWhen(
-      loaded: (characters) {
-        // При forceRefresh создаем новую коллекцию, чтобы гарантировать rebuild
-        emit(CharactersState.loaded(
-          forceRefresh ? [...characters] : characters,
-        ));
-      },
-      orElse: () {},
-    );
-  }
-
-  /// Применить внешнее изменение статуса избранного (например, с вкладки Избранное)
-  /// Обновляет внутренний кэш и форсирует перерисовку списка
-  void applyExternalFavoriteChange(int characterId, bool isFavorite) {
-    _favoritesCache[characterId] = isFavorite;
-    _updateCharactersState(forceRefresh: true);
   }
 }

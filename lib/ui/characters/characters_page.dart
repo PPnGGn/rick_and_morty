@@ -27,7 +27,6 @@ class _CharactersPageState extends State<CharactersPage> {
   }
 
   void _onScroll() {
-    // Проверяем, если скролл приблизился к концу
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 300) {
       cubit.loadMoreCharacters();
@@ -65,18 +64,16 @@ class _CharactersPageState extends State<CharactersPage> {
                   color: theme.colorScheme.primary,
                 ),
               ),
-              loaded: (characters) => RefreshIndicator(
+              loaded: (characters, favoritesCache) => RefreshIndicator(
                 color: AppColors.primary,
                 onRefresh: () => cubit.refreshCharacters(),
                 child: ListView.builder(
                   controller: _scrollController,
-                 // physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: characters.length + 1, // +1 для лоадера внизу
+                  itemCount: characters.length + 1,
                   itemBuilder: (context, index) {
                     if (index < characters.length) {
                       final character = characters[index];
-                      final isFavorite =
-                          cubit.isFavoriteSync(character.id) ?? false;
+                      final isFavorite = favoritesCache[character.id] ?? false;
                       return CharacterCard(
                         character: character,
                         isFavorite: isFavorite,
@@ -86,13 +83,10 @@ class _CharactersPageState extends State<CharactersPage> {
                         },
                       );
                     } else {
-                      // Нижний лоадер для дозагрузки
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 32),
                         child: Center(
-                          child: CircularProgressIndicator(
-                            color: theme.colorScheme.primary,
-                          ),
+                          child: CircularProgressIndicator(),
                         ),
                       );
                     }

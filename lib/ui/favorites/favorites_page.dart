@@ -45,12 +45,7 @@ class _FavoritesPageState extends State<FavoritesPage>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$characterName удален из избранного'),
-        action: SnackBarAction(
-          label: 'Отмена',
-          onPressed: () {
-            // Пока что оставляем без функционала отмены
-          },
-        ),
+      
       ),
     );
   }

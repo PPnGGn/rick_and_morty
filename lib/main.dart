@@ -18,14 +18,13 @@ class RickAndMortyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final router = getIt<AppRouter>();
-    
+
     return BlocProvider(
       create: (context) => getIt<SettingsCubit>()..load(),
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           return state.maybeWhen(
             loaded: (isDark) => MaterialApp.router(
-              title: AppStrings.appName,
               routerConfig: router.config(),
               theme: appLightTheme,
               darkTheme: appDarkTheme,
@@ -33,7 +32,6 @@ class RickAndMortyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
             ),
             orElse: () => MaterialApp.router(
-              title: AppStrings.appName,
               routerConfig: router.config(),
               theme: appLightTheme,
               darkTheme: appDarkTheme,

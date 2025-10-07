@@ -68,7 +68,7 @@ class _CharactersPageState extends State<CharactersPage>
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(
-          title: Text(AppStrings.appName, style: theme.textTheme.titleLarge),
+          title: Text(AppStrings.characters, style: theme.textTheme.titleLarge),
           backgroundColor: theme.colorScheme.surface,
           foregroundColor: theme.colorScheme.primary,
           elevation: 0.5,

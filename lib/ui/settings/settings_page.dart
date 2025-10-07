@@ -49,73 +49,24 @@ class SettingsPage extends StatelessWidget {
                       style: theme.textTheme.bodyLarge,
                     ),
                     subtitle: Text(
-                      isDark ? AppStrings.darkThemeEnabled : AppStrings.lightThemeEnabled,
+                      isDark
+                          ? AppStrings.darkThemeEnabled
+                          : AppStrings.lightThemeEnabled,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                     value: isDark,
                     onChanged: (value) {
                       context.read<SettingsCubit>().changeTheme(value);
                     },
-                    activeColor: theme.colorScheme.primary,
+                    activeThumbColor: theme.colorScheme.primary,
                     secondary: Icon(
                       isDark ? Icons.dark_mode : Icons.light_mode,
                       color: theme.colorScheme.primary,
                     ),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Секция "О приложении"
-                Text(
-                  AppStrings.about,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: Icon(
-                          Icons.info_outline,
-                          color: theme.colorScheme.primary,
-                        ),
-                        title: Text(AppStrings.version, style: theme.textTheme.bodyLarge),
-                        subtitle: Text(
-                          AppConstants.appVersion,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.7),
-                          ),
-                        ),
-                      ),
-                      Divider(
-                        height: 1,
-                        color: theme.colorScheme.onSurface.withOpacity(0.1),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.code,
-                          color: theme.colorScheme.primary,
-                        ),
-                        title: Text(AppStrings.api, style: theme.textTheme.bodyLarge),
-                        subtitle: Text(
-                          AppConstants.apiName,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.7),
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ],

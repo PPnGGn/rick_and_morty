@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rick_and_morty/core/constants/app_constants.dart';
@@ -11,12 +12,19 @@ class SettingsLocalDataSource {
     try {
       final prefs = await SharedPreferences.getInstance();
       final themeStr = prefs.getString(PrefsKeys.themeMode);
+
+      // Если настройка не установлена, используем системную тему
+      if (themeStr == null) {
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark;
+      }
+
       final isDark = themeStr == ThemeValues.dark;
       AppLogger.info('Загружена тема: ${isDark ? "тёмная" : "светлая"}');
       return isDark;
     } catch (e, stackTrace) {
       AppLogger.error('Ошибка загрузки настроек темы', e, stackTrace);
-      return false; // По умолчанию светлая тема
+      return false;
     }
   }
 

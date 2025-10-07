@@ -27,11 +27,16 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   /// Изменить тему приложения
   Future<void> changeTheme(bool isDark) async {
+    // Сначала обновляем UI
+    emit(SettingsState.loaded(isDark: isDark));
+
     try {
+      // Потом сохраняем в background
       await _repository.setThemeMode(isDark);
-      emit(SettingsState.loaded(isDark: isDark));
     } catch (e, stackTrace) {
       AppLogger.error('Ошибка изменения темы', e, stackTrace);
+      // Возвращаем предыдущее состояние при ошибке
+      emit(SettingsState.loaded(isDark: !isDark));
     }
   }
 }

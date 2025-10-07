@@ -7,15 +7,6 @@ class AppConstants {
 
   /// Порог для начала загрузки следующей страницы (пиксели от конца списка)
   static const double loadMoreThreshold = 300.0;
-
-  /// Версия приложения
-  static const String appVersion = '1.0.0';
-
-  /// Название API
-  static const String apiName = 'Rick and Morty API';
-
-  /// Время кеша в часах
-  static const int cacheValidityHours = 24;
 }
 
 /// Ключи для SharedPreferences
@@ -34,12 +25,11 @@ class ThemeValues {
   static const String light = 'light';
 }
 
-/// Строки приложения (локализация)
+/// Строки приложения
 class AppStrings {
   AppStrings._();
 
   // Общие
-  static const String appName = 'Rick & Morty';
   static const String loading = 'Загрузка...';
   static const String error = 'Ошибка';
   static const String retry = 'Повторить';

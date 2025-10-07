@@ -40,7 +40,7 @@ class CharacterCard extends StatelessWidget {
                   width: 68,
                   height: 68,
                   fit: BoxFit.cover,
-                  errorWidget: (context, error, stackTrace) => Container(
+                  errorWidget: (_, __, ___) => Container(
                     color: theme.colorScheme.primary.withOpacity(0.08),
                     width: 68,
                     height: 68,

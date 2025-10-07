@@ -1,8 +1,9 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
+import 'package:rick_and_morty/core/di/injection.dart';
 import 'package:rick_and_morty/core/utils/app_colors.dart';
+import 'package:rick_and_morty/core/constants/app_constants.dart';
 import 'package:rick_and_morty/ui/characters/cubit/characters_cubit.dart';
 import 'package:rick_and_morty/ui/widgets/character_card.dart';
 
@@ -16,26 +17,27 @@ class CharactersPage extends StatefulWidget {
 
 class _CharactersPageState extends State<CharactersPage> {
   late final ScrollController _scrollController;
-  late CharactersCubit cubit;
+  late final CharactersCubit _cubit;
 
   @override
   void initState() {
     super.initState();
-    cubit = GetIt.instance<CharactersCubit>()..fetchCharacters();
+    _cubit = getIt<CharactersCubit>()..fetchCharacters();
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
-      cubit.loadMoreCharacters();
+        _scrollController.position.maxScrollExtent - AppConstants.loadMoreThreshold) {
+      _cubit.loadMoreCharacters();
     }
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _cubit.close();
     super.dispose();
   }
 
@@ -44,11 +46,11 @@ class _CharactersPageState extends State<CharactersPage> {
     final theme = Theme.of(context);
 
     return BlocProvider.value(
-      value: cubit,
+      value: _cubit,
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(
-          title: Text('Rick & Morty', style: theme.textTheme.titleLarge),
+          title: Text(AppStrings.appName, style: theme.textTheme.titleLarge),
           backgroundColor: theme.colorScheme.surface,
           foregroundColor: theme.colorScheme.primary,
           elevation: 0.5,
@@ -57,7 +59,7 @@ class _CharactersPageState extends State<CharactersPage> {
           builder: (context, state) {
             return state.when(
               initial: () => Center(
-                child: Text('Загрузка...', style: theme.textTheme.bodyLarge),
+                child: Text(AppStrings.loading, style: theme.textTheme.bodyLarge),
               ),
               loading: () => Center(
                 child: CircularProgressIndicator(
@@ -66,7 +68,7 @@ class _CharactersPageState extends State<CharactersPage> {
               ),
               loaded: (characters, favoritesCache) => RefreshIndicator(
                 color: AppColors.primary,
-                onRefresh: () => cubit.refreshCharacters(),
+                onRefresh: () => _cubit.refreshCharacters(),
                 child: ListView.builder(
                   controller: _scrollController,
                   itemCount: characters.length + 1,
@@ -79,12 +81,12 @@ class _CharactersPageState extends State<CharactersPage> {
                         isFavorite: isFavorite,
                         onTap: () {},
                         onFavoriteToggle: () {
-                          cubit.toggleFavorite(character);
+                          _cubit.toggleFavorite(character);
                         },
                       );
                     } else {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 32),
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32),
                         child: Center(
                           child: CircularProgressIndicator(),
                         ),
@@ -94,11 +96,33 @@ class _CharactersPageState extends State<CharactersPage> {
                 ),
               ),
               error: (error) => Center(
-                child: Text(
-                  'Ошибка: $error',
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: theme.colorScheme.error,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: theme.colorScheme.error,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      '${AppStrings.error}: $error',
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: () => _cubit.fetchCharacters(refresh: true),
+                      icon: const Icon(Icons.refresh),
+                      label: Text(AppStrings.retry),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.onPrimary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );

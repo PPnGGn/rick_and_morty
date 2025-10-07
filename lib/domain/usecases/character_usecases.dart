@@ -73,3 +73,10 @@ class IsFavoriteUseCase {
   IsFavoriteUseCase(this._repository);
   Future<bool> call(int id) => _repository.isFavorite(id);
 }
+
+@lazySingleton
+class GetFavoriteIdsUseCase {
+  final CharacterRepository _repository;
+  GetFavoriteIdsUseCase(this._repository);
+  Future<Set<int>> call() => _repository.getFavoriteIds();
+}

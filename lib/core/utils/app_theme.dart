@@ -25,7 +25,6 @@ final ThemeData appLightTheme = ThemeData(
     onPrimary: AppColors.surface,
     onSecondary: AppColors.text,
     onSurface: AppColors.text,
-    background: AppColors.background,
   ),
   cardTheme: const CardThemeData(
     color: AppColors.card,
@@ -127,7 +126,6 @@ final ThemeData appDarkTheme = ThemeData(
     onPrimary: AppColors.surface,
     onSecondary: Color(0xFFF9FAFB),
     onSurface: AppColors.yellow,
-    background: Color(0xFF181D23),
   ),
   cardTheme: const CardThemeData(
     color: Color(0xFF222A36),

@@ -22,4 +22,5 @@ abstract class CharacterRepository {
   Future<void> removeFromFavorites(int id);
   Future<List<CharacterEntity>> getFavorites();
   Future<bool> isFavorite(int id);
+  Future<Set<int>> getFavoriteIds();
 }

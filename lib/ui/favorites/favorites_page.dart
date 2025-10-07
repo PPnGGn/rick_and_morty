@@ -1,11 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:rick_and_morty/core/di/injection.dart';
+import 'package:rick_and_morty/core/constants/app_constants.dart';
 import 'package:rick_and_morty/domain/enums/enums.dart';
 import 'package:rick_and_morty/ui/favorites/cubit/favorites_cubit.dart';
-import 'package:rick_and_morty/ui/characters/cubit/characters_cubit.dart';
 import 'package:rick_and_morty/ui/widgets/character_card.dart';
 
 @RoutePage()
@@ -56,7 +55,7 @@ class _FavoritesPageState extends State<FavoritesPage>
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(
-          title: Text('Избранные', style: theme.textTheme.titleLarge),
+          title: Text(AppStrings.favorites, style: theme.textTheme.titleLarge),
           backgroundColor: theme.colorScheme.surface,
           foregroundColor: theme.colorScheme.primary,
           elevation: 0.5,
@@ -66,16 +65,16 @@ class _FavoritesPageState extends State<FavoritesPage>
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                   child: Row(
                     children: [
                       DropdownButton<CharacterStatus?>(
                         value: _cubit.statusFilter,
-                        hint: Text("Статус"),
+                        hint: Text(AppStrings.characterStatus),
                         items: [
-                          const DropdownMenuItem(
+                          DropdownMenuItem(
                             value: null,
-                            child: Text("Все"),
+                            child: Text(AppStrings.allStatuses),
                           ),
                           ...CharacterStatus.values.map(
                             (status) => DropdownMenuItem(
@@ -89,11 +88,11 @@ class _FavoritesPageState extends State<FavoritesPage>
                       const SizedBox(width: 16),
                       DropdownButton<CharacterGender?>(
                         value: _cubit.genderFilter,
-                        hint: Text("Гендер"),
+                        hint: Text(AppStrings.characterGender),
                         items: [
-                          const DropdownMenuItem(
+                          DropdownMenuItem(
                             value: null,
-                            child: Text("Все"),
+                            child: Text(AppStrings.allGenders),
                           ),
                           ...CharacterGender.values.map(
                             (gender) => DropdownMenuItem(
@@ -106,8 +105,8 @@ class _FavoritesPageState extends State<FavoritesPage>
                       ),
                       const Spacer(),
                       IconButton(
-                        icon: Icon(Icons.clear),
-                        tooltip: "Сбросить фильтры",
+                        icon: const Icon(Icons.clear),
+                        tooltip: AppStrings.resetFilters,
                         onPressed: _cubit.resetFilters,
                       ),
                     ],
@@ -117,7 +116,7 @@ class _FavoritesPageState extends State<FavoritesPage>
                   child: state.when(
                     initial: () => Center(
                       child: Text(
-                        'Нет избранных',
+                        AppStrings.favoritesEmpty,
                         style: theme.textTheme.bodyLarge,
                       ),
                     ),
@@ -128,9 +127,28 @@ class _FavoritesPageState extends State<FavoritesPage>
                     ),
                     loaded: (favorites) => favorites.isEmpty
                         ? Center(
-                            child: Text(
-                              'Избранные пусты',
-                              style: theme.textTheme.bodyLarge,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.star_border,
+                                  size: 64,
+                                  color: theme.colorScheme.onSurface.withOpacity(0.3),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  AppStrings.favoritesEmpty,
+                                  style: theme.textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  AppStrings.favoritesEmptyHint,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           )
                         : ListView.builder(
@@ -141,21 +159,40 @@ class _FavoritesPageState extends State<FavoritesPage>
                                 character: character,
                                 isFavorite: true,
                                 onTap: () {},
-                                onFavoriteToggle: () {
-                                  _cubit.removeFavorite(character.id).then((_) {
-                                    GetIt.instance<CharactersCubit>()
-                                        .refreshCharacters();
-                                  });
+                                onFavoriteToggle: () async {
+                                  await _cubit.removeFavorite(character.id);
                                 },
                               );
                             },
                           ),
                     error: (error) => Center(
-                      child: Text(
-                        'Ошибка: $error',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.error,
-                        ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: theme.colorScheme.error,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            '${AppStrings.error}: $error',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.error,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            onPressed: () => _cubit.fetchFavorites(),
+                            icon: const Icon(Icons.refresh),
+                            label: Text(AppStrings.retry),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: theme.colorScheme.primary,
+                              foregroundColor: theme.colorScheme.onPrimary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/ui/settings/cubit/settings_cubit.dart';
+import 'package:rick_and_morty/core/constants/app_constants.dart';
 
 @RoutePage()
 class SettingsPage extends StatelessWidget {
@@ -14,7 +15,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
-        title: Text('Настройки', style: theme.textTheme.titleLarge),
+        title: Text(AppStrings.settings, style: theme.textTheme.titleLarge),
         backgroundColor: theme.colorScheme.surface,
         foregroundColor: theme.colorScheme.primary,
         elevation: 0.5,
@@ -28,7 +29,7 @@ class SettingsPage extends StatelessWidget {
               children: [
                 // Секция "Внешний вид"
                 Text(
-                  'Внешний вид',
+                  AppStrings.appearance,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -44,11 +45,11 @@ class SettingsPage extends StatelessWidget {
                   ),
                   child: SwitchListTile(
                     title: Text(
-                      'Тёмная тема',
+                      AppStrings.darkTheme,
                       style: theme.textTheme.bodyLarge,
                     ),
                     subtitle: Text(
-                      isDark ? 'Включена тёмная тема' : 'Включена светлая тема',
+                      isDark ? AppStrings.darkThemeEnabled : AppStrings.lightThemeEnabled,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
@@ -69,7 +70,7 @@ class SettingsPage extends StatelessWidget {
 
                 // Секция "О приложении"
                 Text(
-                  'О приложении',
+                  AppStrings.about,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -89,9 +90,9 @@ class SettingsPage extends StatelessWidget {
                           Icons.info_outline,
                           color: theme.colorScheme.primary,
                         ),
-                        title: Text('Версия', style: theme.textTheme.bodyLarge),
+                        title: Text(AppStrings.version, style: theme.textTheme.bodyLarge),
                         subtitle: Text(
-                          '1.0.0',
+                          AppConstants.appVersion,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface.withOpacity(0.7),
                           ),
@@ -106,9 +107,9 @@ class SettingsPage extends StatelessWidget {
                           Icons.code,
                           color: theme.colorScheme.primary,
                         ),
-                        title: Text('API', style: theme.textTheme.bodyLarge),
+                        title: Text(AppStrings.api, style: theme.textTheme.bodyLarge),
                         subtitle: Text(
-                          'Rick and Morty API',
+                          AppConstants.apiName,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface.withOpacity(0.7),
                           ),

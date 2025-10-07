@@ -20,10 +20,16 @@ import 'package:rick_and_morty/data/datasources/characters/characters_local_data
     as _i633;
 import 'package:rick_and_morty/data/datasources/characters/characters_remote_datasource.dart'
     as _i405;
+import 'package:rick_and_morty/data/datasources/settings/settings_local_datasource.dart'
+    as _i648;
 import 'package:rick_and_morty/data/repositories/character_repository.dart'
     as _i555;
+import 'package:rick_and_morty/data/repositories/settings_repository.dart'
+    as _i534;
 import 'package:rick_and_morty/domain/repositories/character_repository.dart'
     as _i113;
+import 'package:rick_and_morty/domain/repositories/settings_repository.dart'
+    as _i59;
 import 'package:rick_and_morty/domain/usecases/character_usecases.dart'
     as _i892;
 import 'package:rick_and_morty/ui/characters/cubit/characters_cubit.dart'
@@ -41,15 +47,23 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final dBModule = _$DBModule();
     final networkModule = _$NetworkModule();
-    gh.factory<_i1033.SettingsCubit>(() => _i1033.SettingsCubit());
     gh.singleton<_i1004.AppRouter>(() => _i1004.AppRouter());
     gh.lazySingleton<_i199.AppDatabase>(() => dBModule.appDatabase());
     gh.lazySingleton<_i361.Dio>(() => networkModule.dio());
+    gh.lazySingleton<_i648.SettingsLocalDataSource>(
+      () => _i648.SettingsLocalDataSource(),
+    );
+    gh.lazySingleton<_i59.SettingsRepository>(
+      () => _i534.SettingsRepositoryImpl(gh<_i648.SettingsLocalDataSource>()),
+    );
     gh.lazySingleton<_i405.CharactersRemoteDatasource>(
       () => networkModule.charactersRemoteDatasource(gh<_i361.Dio>()),
     );
     gh.lazySingleton<_i633.CharacterLocalDataSource>(
       () => _i633.CharacterLocalDataSource(gh<_i199.AppDatabase>()),
+    );
+    gh.factory<_i1033.SettingsCubit>(
+      () => _i1033.SettingsCubit(gh<_i59.SettingsRepository>()),
     );
     gh.lazySingleton<_i113.CharacterRepository>(
       () => _i555.CharacterRepositoryImpl(
@@ -84,6 +98,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i892.IsFavoriteUseCase>(
       () => _i892.IsFavoriteUseCase(gh<_i113.CharacterRepository>()),
     );
+    gh.lazySingleton<_i892.GetFavoriteIdsUseCase>(
+      () => _i892.GetFavoriteIdsUseCase(gh<_i113.CharacterRepository>()),
+    );
     gh.factory<_i853.FavoritesCubit>(
       () => _i853.FavoritesCubit(
         gh<_i892.GetFavoritesUseCase>(),
@@ -95,7 +112,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i892.GetCharactersUseCase>(),
         gh<_i892.AddToFavoritesUseCase>(),
         gh<_i892.RemoveFromFavoritesUseCase>(),
-        gh<_i892.IsFavoriteUseCase>(),
+        gh<_i892.GetFavoriteIdsUseCase>(),
       ),
     );
     return this;

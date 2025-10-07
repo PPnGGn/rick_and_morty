@@ -39,6 +39,52 @@ class _FavoritesPageState extends State<FavoritesPage>
     }
   }
 
+  void _showRemovedFromFavoritesSnackBar(String characterName) {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$characterName удален из избранного'),
+        action: SnackBarAction(
+          label: 'Отмена',
+          onPressed: () {
+            // Пока что оставляем без функционала отмены
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<bool?> _showDeleteConfirmationDialog() async {
+    if (!mounted) return null;
+
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        final theme = Theme.of(context);
+        return AlertDialog(
+          title: const Text('Удалить из избранного?'),
+          content: const Text(
+            'Вы уверены, что хотите удалить этого персонажа из избранного?',
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Отмена'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: TextButton.styleFrom(
+                foregroundColor: theme.colorScheme.error,
+              ),
+              child: const Text('Удалить'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _tabsRouter?.removeListener(_onTabChanged);
@@ -160,13 +206,41 @@ class _FavoritesPageState extends State<FavoritesPage>
                             itemCount: favorites.length,
                             itemBuilder: (context, idx) {
                               final character = favorites[idx];
-                              return CharacterCard(
-                                character: character,
-                                isFavorite: true,
-                                onTap: () {},
-                                onFavoriteToggle: () async {
+                              return Dismissible(
+                                key: Key('dismissible_${character.id}'),
+                                direction: DismissDirection.endToStart,
+                                background: Container(
+                                  alignment: Alignment.centerRight,
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  color: theme.colorScheme.error,
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 32,
+                                  ),
+                                ),
+                                confirmDismiss: (_) =>
+                                    _showDeleteConfirmationDialog(),
+                                onDismissed: (direction) async {
                                   await _cubit.removeFavorite(character.id);
+                                  _showRemovedFromFavoritesSnackBar(
+                                    character.name,
+                                  );
                                 },
+                                child: CharacterCard(
+                                  character: character,
+                                  isFavorite: true,
+                                  onTap: () {},
+                                  onFavoriteToggle: () async {
+                                    if (await _showDeleteConfirmationDialog() ==
+                                        true) {
+                                      await _cubit.removeFavorite(character.id);
+                                      _showRemovedFromFavoritesSnackBar(
+                                        character.name,
+                                      );
+                                    }
+                                  },
+                                ),
                               );
                             },
                           ),

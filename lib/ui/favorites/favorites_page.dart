@@ -65,7 +65,10 @@ class _FavoritesPageState extends State<FavoritesPage>
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 8.0,
+                  ),
                   child: Row(
                     children: [
                       DropdownButton<CharacterStatus?>(
@@ -133,7 +136,8 @@ class _FavoritesPageState extends State<FavoritesPage>
                                 Icon(
                                   Icons.star_border,
                                   size: 64,
-                                  color: theme.colorScheme.onSurface.withOpacity(0.3),
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.3),
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
@@ -144,7 +148,8 @@ class _FavoritesPageState extends State<FavoritesPage>
                                 Text(
                                   AppStrings.favoritesEmptyHint,
                                   style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.6),
                                   ),
                                   textAlign: TextAlign.center,
                                 ),

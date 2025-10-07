@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/core/di/injection.dart';
@@ -15,9 +16,11 @@ class CharactersPage extends StatefulWidget {
   State<CharactersPage> createState() => _CharactersPageState();
 }
 
-class _CharactersPageState extends State<CharactersPage> {
+class _CharactersPageState extends State<CharactersPage>
+    with AutoRouteAwareStateMixin<CharactersPage> {
   late final ScrollController _scrollController;
   late final CharactersCubit _cubit;
+  TabsRouter? _tabsRouter;
 
   @override
   void initState() {
@@ -29,14 +32,29 @@ class _CharactersPageState extends State<CharactersPage> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - AppConstants.loadMoreThreshold) {
+        _scrollController.position.maxScrollExtent -
+            AppConstants.loadMoreThreshold) {
       _cubit.loadMoreCharacters();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _tabsRouter ??= AutoTabsRouter.of(context);
+    _tabsRouter?.addListener(_onTabChanged);
+  }
+
+  void _onTabChanged() {
+    if (_tabsRouter?.activeIndex == 0) {
+      _cubit.refreshFavorites();
     }
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _tabsRouter?.removeListener(_onTabChanged);
     _cubit.close();
     super.dispose();
   }
@@ -59,7 +77,10 @@ class _CharactersPageState extends State<CharactersPage> {
           builder: (context, state) {
             return state.when(
               initial: () => Center(
-                child: Text(AppStrings.loading, style: theme.textTheme.bodyLarge),
+                child: Text(
+                  AppStrings.loading,
+                  style: theme.textTheme.bodyLarge,
+                ),
               ),
               loading: () => Center(
                 child: CircularProgressIndicator(
@@ -87,9 +108,7 @@ class _CharactersPageState extends State<CharactersPage> {
                     } else {
                       return const Padding(
                         padding: EdgeInsets.symmetric(vertical: 32),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                        child: Center(child: CircularProgressIndicator()),
                       );
                     }
                   },

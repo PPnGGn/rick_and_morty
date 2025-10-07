@@ -42,7 +42,7 @@ class CharactersCubit extends Cubit<CharactersState> {
       if (_currentPage == 1) {
         emit(const CharactersState.loading());
       }
-      
+
       final characters = await _getCharactersUseCase.call(page: _currentPage);
       _hasMore = characters.length == AppConstants.pageSize;
       _allCharacters = _currentPage == 1
@@ -51,12 +51,10 @@ class CharactersCubit extends Cubit<CharactersState> {
 
       // Получаем все избранные одним запросом (оптимизация!)
       await _updateFavoritesCache();
-      
+
       // Преобразуем Set в Map для state
-      final favoritesMap = {
-        for (var id in _favoriteIds) id: true,
-      };
-      
+      final favoritesMap = {for (var id in _favoriteIds) id: true};
+
       emit(CharactersState.loaded(_allCharacters, favoritesMap));
       _currentPage++;
     } catch (e, stackTrace) {
@@ -87,10 +85,8 @@ class CharactersCubit extends Cubit<CharactersState> {
       } else {
         _favoriteIds.add(character.id);
       }
-      
-      final favoritesMap = {
-        for (var id in _favoriteIds) id: true,
-      };
+
+      final favoritesMap = {for (var id in _favoriteIds) id: true};
       emit(CharactersState.loaded(_allCharacters, favoritesMap));
 
       // Операция в базе
@@ -102,17 +98,13 @@ class CharactersCubit extends Cubit<CharactersState> {
 
       // Перезапрос актуального статуса из локального источника
       await _updateFavoritesCache();
-      final updatedFavoritesMap = {
-        for (var id in _favoriteIds) id: true,
-      };
+      final updatedFavoritesMap = {for (var id in _favoriteIds) id: true};
       emit(CharactersState.loaded(_allCharacters, updatedFavoritesMap));
     } catch (e, stackTrace) {
       AppLogger.error('Ошибка переключения избранного', e, stackTrace);
       // Откатываем изменения при ошибке
       await _updateFavoritesCache();
-      final favoritesMap = {
-        for (var id in _favoriteIds) id: true,
-      };
+      final favoritesMap = {for (var id in _favoriteIds) id: true};
       emit(CharactersState.loaded(_allCharacters, favoritesMap));
     }
   }
@@ -124,6 +116,18 @@ class CharactersCubit extends Cubit<CharactersState> {
     } catch (e, stackTrace) {
       AppLogger.error('Ошибка обновления кеша избранных', e, stackTrace);
       _favoriteIds = {};
+    }
+  }
+
+  Future<void> refreshFavorites() async {
+    await _updateFavoritesCache();
+    if (state is _Loaded) {
+      final loadedState = state as _Loaded;
+      emit(
+        CharactersState.loaded(loadedState.characters, {
+          for (var id in _favoriteIds) id: true,
+        }),
+      );
     }
   }
 }

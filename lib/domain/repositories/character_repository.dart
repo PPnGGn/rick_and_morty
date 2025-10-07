@@ -15,7 +15,7 @@ abstract class CharacterRepository {
 
   // Утилиты кеша
   Future<void> clearCache();
-  Future<bool> hasCachedData();
+  Future<bool> hasCachedData({int? page, int pageSize = 20});
 
   // Избранное из локалки
   Future<void> addToFavorites(CharacterEntity character);

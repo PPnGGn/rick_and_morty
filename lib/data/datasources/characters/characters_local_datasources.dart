@@ -106,11 +106,22 @@ class CharacterLocalDataSource {
     }
   }
 
-  /// Получить всех персонажей из кеша
-  Future<List<CharacterLocalModel>> getCachedCharacters() async {
+  /// Получить персонажей из кеша с поддержкой пагинации
+  /// [page] - номер страницы (начинается с 1)
+  /// [pageSize] - количество элементов на странице
+  Future<List<CharacterLocalModel>> getCachedCharacters({
+    int page = 1,
+    int pageSize = 20,
+  }) async {
     try {
-      final rows = await _database.select(_database.characters).get();
-      AppLogger.info('Найдено в кеше персонажей: ${rows.length}');
+      final query = _database.select(_database.characters)
+        ..orderBy([(t) => OrderingTerm(expression: t.id)])
+        ..limit(pageSize, offset: (page - 1) * pageSize);
+
+      final rows = await query.get();
+      AppLogger.info(
+        'Загружено из кеша: ${rows.length} персонажей (страница $page, размер $pageSize)',
+      );
       return rows.map((row) => CharacterLocalModel.fromDb(row)).toList();
     } catch (e, stackTrace) {
       AppLogger.error('Ошибка чтения персонажей из кеша', e, stackTrace);
@@ -139,11 +150,30 @@ class CharacterLocalDataSource {
   }
 
   /// Проверить, есть ли кеш
-  Future<bool> hasCachedData() async {
+  /// [page] - номер страницы для проверки (опционально)
+  /// [pageSize] - размер страницы (по умолчанию 20)
+  /// Если page не указан, проверяет наличие любых данных в кеше
+  Future<bool> hasCachedData({int? page, int pageSize = 20}) async {
     final count = await (_database.selectOnly(
       _database.characters,
     )..addColumns([_database.characters.id.count()])).getSingle();
-    return count.read(_database.characters.id.count()) != 0;
+    
+    final totalCount = count.read(_database.characters.id.count()) ?? 0;
+    
+    // Если page не указан, просто проверяем наличие данных
+    if (page == null) {
+      return totalCount > 0;
+    }
+    
+    // Проверяем, достаточно ли данных для запрашиваемой страницы
+    final requiredCount = (page - 1) * pageSize;
+    final hasEnoughData = totalCount > requiredCount;
+    
+    AppLogger.info(
+      'Проверка кеша: всего $totalCount записей, требуется минимум $requiredCount для страницы $page',
+    );
+    
+    return hasEnoughData;
   }
 
   // ==== ИЗБРАННОЕ ====

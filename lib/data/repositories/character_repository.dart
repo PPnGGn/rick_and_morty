@@ -14,52 +14,56 @@ class CharacterRepositoryImpl implements CharacterRepository {
 
   CharacterRepositoryImpl(this._remote, this._local);
 
-  @override
-  Future<List<CharacterEntity>> getCharacters({
-    int page = 1,
-    String? name,
-    String? status,
-  }) async {
-    try {
-      AppLogger.info('Загрузка персонажей из сети (страница: $page)');
-      final response = await _remote.getAllCharacters(
-        page: page,
-        name: name,
-        status: status,
-      );
+@override
+Future<List<CharacterEntity>> getCharacters({
+  int page = 1,
+  String? name,
+  String? status,
+}) async {
+  try {
+    final response = await _remote.getAllCharacters(
+      page: page,
+      name: name,
+      status: status,
+    );
 
-      // Преобразуем response models в entities
-      final characters = response.results
-          .map((model) => model.toEntity())
+    // Преобразуем response models в entities
+    final characters = response.results
+        .map((model) => model.toEntity())
+        .toList();
+    AppLogger.info('Загружено из сети: ${characters.length} персонажей');
+
+    // Кешируем все загруженные персонажи (без фильтров)
+    // Фильтрованные результаты не кешируем, так как они могут быть неполными
+    if (name == null && status == null) {
+      AppLogger.info('Кешируем данные (страница $page)');
+      // Преобразуем entities в local models для кеширования
+      final localModels = characters
+          .map((entity) => CharacterLocalModel.fromEntity(entity))
           .toList();
-      AppLogger.info('Загружено из сети: ${characters.length} персонажей');
-
-      // Кешируем только первую страницу без фильтров
-      if (page == 1 && name == null && status == null) {
-        AppLogger.info('Кешируем данные');
-        // Преобразуем entities в local models для кеширования
-        final localModels = characters
-            .map((entity) => CharacterLocalModel.fromEntity(entity))
-            .toList();
-        await _local.cacheCharacters(localModels);
-      }
-      return characters;
-    } catch (e, stackTrace) {
-      AppLogger.error('Ошибка загрузки из сети', e, stackTrace);
-      AppLogger.info('Пробуем загрузить из кеша');
-
-      // Загружаем из кеша и преобразуем обратно в entities
-      final cachedModels = await _local.getCachedCharacters();
-      if (cachedModels.isEmpty) {
-        AppLogger.warning('Кеш пустой!');
-        throw Exception('Нет интернета и кеш пуст');
-      }
-
-      final cached = cachedModels.map((model) => model.toEntity()).toList();
-      AppLogger.info('Загружено из кеша: ${cached.length} персонажей');
-      return cached;
+      await _local.cacheCharacters(localModels);
+    } else {
+      AppLogger.info('Пропускаем кеширование - применены фильтры');
     }
+    return characters;
+  } catch (e, stackTrace) {
+    AppLogger.error('Ошибка загрузки из сети', e, stackTrace);
+    AppLogger.info('Пробуем загрузить из кеша');
+
+    // Загружаем из кеша с учетом пагинации
+    final cachedModels = await _local.getCachedCharacters(page: page);
+    
+    if (cachedModels.isEmpty) {
+      // Возвращаем пустой список вместо выброса исключения
+      AppLogger.info('Достигнут конец кешированных данных (страница $page)');
+      return [];
+    }
+
+    final cached = cachedModels.map((model) => model.toEntity()).toList();
+    AppLogger.info('Загружено из кеша: ${cached.length} персонажей (страница $page)');
+    return cached;
   }
+}
 
   @override
   Future<CharacterEntity?> getCharacter(int id) async {
@@ -110,7 +114,8 @@ class CharacterRepositoryImpl implements CharacterRepository {
   Future<void> clearCache() => _local.clearCache();
 
   @override
-  Future<bool> hasCachedData() => _local.hasCachedData();
+  Future<bool> hasCachedData({int? page, int pageSize = 20}) => 
+      _local.hasCachedData(page: page, pageSize: pageSize);
 
   @override
   Future<List<CharacterEntity>> refreshCharacters() async {

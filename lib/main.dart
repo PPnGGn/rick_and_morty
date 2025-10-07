@@ -4,7 +4,6 @@ import 'package:rick_and_morty/core/router/app_router.dart';
 import 'package:rick_and_morty/core/di/injection.dart';
 import 'package:rick_and_morty/core/utils/app_theme.dart';
 import 'package:rick_and_morty/ui/settings/cubit/settings_cubit.dart';
-import 'package:rick_and_morty/core/constants/app_constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

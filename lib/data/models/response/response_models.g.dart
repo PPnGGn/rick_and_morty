@@ -92,3 +92,33 @@ Map<String, dynamic> _$InfoToJson(_Info instance) => <String, dynamic>{
   'next': instance.next,
   'prev': instance.prev,
 };
+
+_SonarResponse _$SonarResponseFromJson(Map<String, dynamic> json) =>
+    _SonarResponse(
+      response: json['response'] as String,
+      images: (json['images'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      sources: (json['citations'] as List<dynamic>?)
+          ?.map((e) => Citation.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$SonarResponseToJson(_SonarResponse instance) =>
+    <String, dynamic>{
+      'response': instance.response,
+      'images': instance.images,
+      'citations': instance.sources,
+    };
+
+_Citation _$CitationFromJson(Map<String, dynamic> json) => _Citation(
+  url: json['url'] as String,
+  title: json['title'] as String?,
+  text: json['text'] as String?,
+);
+
+Map<String, dynamic> _$CitationToJson(_Citation instance) => <String, dynamic>{
+  'url': instance.url,
+  'title': instance.title,
+  'text': instance.text,
+};

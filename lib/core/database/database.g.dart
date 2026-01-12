@@ -842,15 +842,342 @@ class CharactersCompanion extends UpdateCompanion<Character> {
   }
 }
 
+class $CharacterDescriptionsTable extends CharacterDescriptions
+    with TableInfo<$CharacterDescriptionsTable, CharacterDescription> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CharacterDescriptionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _characterIdMeta = const VerificationMeta(
+    'characterId',
+  );
+  @override
+  late final GeneratedColumn<int> characterId = GeneratedColumn<int>(
+    'character_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isFavoriteMeta = const VerificationMeta(
+    'isFavorite',
+  );
+  @override
+  late final GeneratedColumn<bool> isFavorite = GeneratedColumn<bool>(
+    'is_favorite',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_favorite" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    characterId,
+    description,
+    createdAt,
+    isFavorite,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'character_descriptions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CharacterDescription> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('character_id')) {
+      context.handle(
+        _characterIdMeta,
+        characterId.isAcceptableOrUnknown(
+          data['character_id']!,
+          _characterIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('is_favorite')) {
+      context.handle(
+        _isFavoriteMeta,
+        isFavorite.isAcceptableOrUnknown(data['is_favorite']!, _isFavoriteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {characterId};
+  @override
+  CharacterDescription map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CharacterDescription(
+      characterId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}character_id'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      isFavorite: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_favorite'],
+      )!,
+    );
+  }
+
+  @override
+  $CharacterDescriptionsTable createAlias(String alias) {
+    return $CharacterDescriptionsTable(attachedDatabase, alias);
+  }
+}
+
+class CharacterDescription extends DataClass
+    implements Insertable<CharacterDescription> {
+  final int characterId;
+  final String description;
+  final DateTime createdAt;
+  final bool isFavorite;
+  const CharacterDescription({
+    required this.characterId,
+    required this.description,
+    required this.createdAt,
+    required this.isFavorite,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['character_id'] = Variable<int>(characterId);
+    map['description'] = Variable<String>(description);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['is_favorite'] = Variable<bool>(isFavorite);
+    return map;
+  }
+
+  CharacterDescriptionsCompanion toCompanion(bool nullToAbsent) {
+    return CharacterDescriptionsCompanion(
+      characterId: Value(characterId),
+      description: Value(description),
+      createdAt: Value(createdAt),
+      isFavorite: Value(isFavorite),
+    );
+  }
+
+  factory CharacterDescription.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CharacterDescription(
+      characterId: serializer.fromJson<int>(json['characterId']),
+      description: serializer.fromJson<String>(json['description']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      isFavorite: serializer.fromJson<bool>(json['isFavorite']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'characterId': serializer.toJson<int>(characterId),
+      'description': serializer.toJson<String>(description),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'isFavorite': serializer.toJson<bool>(isFavorite),
+    };
+  }
+
+  CharacterDescription copyWith({
+    int? characterId,
+    String? description,
+    DateTime? createdAt,
+    bool? isFavorite,
+  }) => CharacterDescription(
+    characterId: characterId ?? this.characterId,
+    description: description ?? this.description,
+    createdAt: createdAt ?? this.createdAt,
+    isFavorite: isFavorite ?? this.isFavorite,
+  );
+  CharacterDescription copyWithCompanion(CharacterDescriptionsCompanion data) {
+    return CharacterDescription(
+      characterId: data.characterId.present
+          ? data.characterId.value
+          : this.characterId,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      isFavorite: data.isFavorite.present
+          ? data.isFavorite.value
+          : this.isFavorite,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CharacterDescription(')
+          ..write('characterId: $characterId, ')
+          ..write('description: $description, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('isFavorite: $isFavorite')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(characterId, description, createdAt, isFavorite);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CharacterDescription &&
+          other.characterId == this.characterId &&
+          other.description == this.description &&
+          other.createdAt == this.createdAt &&
+          other.isFavorite == this.isFavorite);
+}
+
+class CharacterDescriptionsCompanion
+    extends UpdateCompanion<CharacterDescription> {
+  final Value<int> characterId;
+  final Value<String> description;
+  final Value<DateTime> createdAt;
+  final Value<bool> isFavorite;
+  const CharacterDescriptionsCompanion({
+    this.characterId = const Value.absent(),
+    this.description = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.isFavorite = const Value.absent(),
+  });
+  CharacterDescriptionsCompanion.insert({
+    this.characterId = const Value.absent(),
+    required String description,
+    required DateTime createdAt,
+    this.isFavorite = const Value.absent(),
+  }) : description = Value(description),
+       createdAt = Value(createdAt);
+  static Insertable<CharacterDescription> custom({
+    Expression<int>? characterId,
+    Expression<String>? description,
+    Expression<DateTime>? createdAt,
+    Expression<bool>? isFavorite,
+  }) {
+    return RawValuesInsertable({
+      if (characterId != null) 'character_id': characterId,
+      if (description != null) 'description': description,
+      if (createdAt != null) 'created_at': createdAt,
+      if (isFavorite != null) 'is_favorite': isFavorite,
+    });
+  }
+
+  CharacterDescriptionsCompanion copyWith({
+    Value<int>? characterId,
+    Value<String>? description,
+    Value<DateTime>? createdAt,
+    Value<bool>? isFavorite,
+  }) {
+    return CharacterDescriptionsCompanion(
+      characterId: characterId ?? this.characterId,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (characterId.present) {
+      map['character_id'] = Variable<int>(characterId.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (isFavorite.present) {
+      map['is_favorite'] = Variable<bool>(isFavorite.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CharacterDescriptionsCompanion(')
+          ..write('characterId: $characterId, ')
+          ..write('description: $description, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('isFavorite: $isFavorite')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $CharactersTable characters = $CharactersTable(this);
+  late final $CharacterDescriptionsTable characterDescriptions =
+      $CharacterDescriptionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [characters];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    characters,
+    characterDescriptions,
+  ];
 }
 
 typedef $$CharactersTableCreateCompanionBuilder =
@@ -1242,10 +1569,212 @@ typedef $$CharactersTableProcessedTableManager =
       Character,
       PrefetchHooks Function()
     >;
+typedef $$CharacterDescriptionsTableCreateCompanionBuilder =
+    CharacterDescriptionsCompanion Function({
+      Value<int> characterId,
+      required String description,
+      required DateTime createdAt,
+      Value<bool> isFavorite,
+    });
+typedef $$CharacterDescriptionsTableUpdateCompanionBuilder =
+    CharacterDescriptionsCompanion Function({
+      Value<int> characterId,
+      Value<String> description,
+      Value<DateTime> createdAt,
+      Value<bool> isFavorite,
+    });
+
+class $$CharacterDescriptionsTableFilterComposer
+    extends Composer<_$AppDatabase, $CharacterDescriptionsTable> {
+  $$CharacterDescriptionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get characterId => $composableBuilder(
+    column: $table.characterId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CharacterDescriptionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CharacterDescriptionsTable> {
+  $$CharacterDescriptionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get characterId => $composableBuilder(
+    column: $table.characterId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CharacterDescriptionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CharacterDescriptionsTable> {
+  $$CharacterDescriptionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get characterId => $composableBuilder(
+    column: $table.characterId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => column,
+  );
+}
+
+class $$CharacterDescriptionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CharacterDescriptionsTable,
+          CharacterDescription,
+          $$CharacterDescriptionsTableFilterComposer,
+          $$CharacterDescriptionsTableOrderingComposer,
+          $$CharacterDescriptionsTableAnnotationComposer,
+          $$CharacterDescriptionsTableCreateCompanionBuilder,
+          $$CharacterDescriptionsTableUpdateCompanionBuilder,
+          (
+            CharacterDescription,
+            BaseReferences<
+              _$AppDatabase,
+              $CharacterDescriptionsTable,
+              CharacterDescription
+            >,
+          ),
+          CharacterDescription,
+          PrefetchHooks Function()
+        > {
+  $$CharacterDescriptionsTableTableManager(
+    _$AppDatabase db,
+    $CharacterDescriptionsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CharacterDescriptionsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$CharacterDescriptionsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$CharacterDescriptionsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> characterId = const Value.absent(),
+                Value<String> description = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<bool> isFavorite = const Value.absent(),
+              }) => CharacterDescriptionsCompanion(
+                characterId: characterId,
+                description: description,
+                createdAt: createdAt,
+                isFavorite: isFavorite,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> characterId = const Value.absent(),
+                required String description,
+                required DateTime createdAt,
+                Value<bool> isFavorite = const Value.absent(),
+              }) => CharacterDescriptionsCompanion.insert(
+                characterId: characterId,
+                description: description,
+                createdAt: createdAt,
+                isFavorite: isFavorite,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CharacterDescriptionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CharacterDescriptionsTable,
+      CharacterDescription,
+      $$CharacterDescriptionsTableFilterComposer,
+      $$CharacterDescriptionsTableOrderingComposer,
+      $$CharacterDescriptionsTableAnnotationComposer,
+      $$CharacterDescriptionsTableCreateCompanionBuilder,
+      $$CharacterDescriptionsTableUpdateCompanionBuilder,
+      (
+        CharacterDescription,
+        BaseReferences<
+          _$AppDatabase,
+          $CharacterDescriptionsTable,
+          CharacterDescription
+        >,
+      ),
+      CharacterDescription,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
   $$CharactersTableTableManager get characters =>
       $$CharactersTableTableManager(_db, _db.characters);
+  $$CharacterDescriptionsTableTableManager get characterDescriptions =>
+      $$CharacterDescriptionsTableTableManager(_db, _db.characterDescriptions);
 }

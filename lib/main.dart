@@ -4,9 +4,11 @@ import 'package:rick_and_morty/core/router/app_router.dart';
 import 'package:rick_and_morty/core/di/injection.dart';
 import 'package:rick_and_morty/core/utils/app_theme.dart';
 import 'package:rick_and_morty/ui/settings/cubit/settings_cubit.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await configureDependencies();
   runApp(const RickAndMortyApp());
 }

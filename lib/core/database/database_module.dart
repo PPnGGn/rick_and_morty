@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:injectable/injectable.dart';
+import 'package:rick_and_morty/core/database/daos/character_description_dao.dart';
 import 'package:rick_and_morty/core/database/database.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -19,4 +20,8 @@ LazyDatabase _openConnection() {
 abstract class DBModule {
   @lazySingleton
   AppDatabase appDatabase() => AppDatabase(_openConnection());
+
+  @lazySingleton
+  CharacterDescriptionDao characterDescriptionDao(AppDatabase db) =>
+      db.characterDescriptionDao;
 }

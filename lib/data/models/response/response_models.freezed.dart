@@ -1452,4 +1452,558 @@ as String?,
 
 }
 
+
+/// @nodoc
+mixin _$SonarResponse {
+
+ String get response; List<String>? get images;@JsonKey(name: 'citations') List<Citation>? get sources;
+/// Create a copy of SonarResponse
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SonarResponseCopyWith<SonarResponse> get copyWith => _$SonarResponseCopyWithImpl<SonarResponse>(this as SonarResponse, _$identity);
+
+  /// Serializes this SonarResponse to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SonarResponse&&(identical(other.response, response) || other.response == response)&&const DeepCollectionEquality().equals(other.images, images)&&const DeepCollectionEquality().equals(other.sources, sources));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,response,const DeepCollectionEquality().hash(images),const DeepCollectionEquality().hash(sources));
+
+@override
+String toString() {
+  return 'SonarResponse(response: $response, images: $images, sources: $sources)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SonarResponseCopyWith<$Res>  {
+  factory $SonarResponseCopyWith(SonarResponse value, $Res Function(SonarResponse) _then) = _$SonarResponseCopyWithImpl;
+@useResult
+$Res call({
+ String response, List<String>? images,@JsonKey(name: 'citations') List<Citation>? sources
+});
+
+
+
+
+}
+/// @nodoc
+class _$SonarResponseCopyWithImpl<$Res>
+    implements $SonarResponseCopyWith<$Res> {
+  _$SonarResponseCopyWithImpl(this._self, this._then);
+
+  final SonarResponse _self;
+  final $Res Function(SonarResponse) _then;
+
+/// Create a copy of SonarResponse
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? response = null,Object? images = freezed,Object? sources = freezed,}) {
+  return _then(_self.copyWith(
+response: null == response ? _self.response : response // ignore: cast_nullable_to_non_nullable
+as String,images: freezed == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
+as List<String>?,sources: freezed == sources ? _self.sources : sources // ignore: cast_nullable_to_non_nullable
+as List<Citation>?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [SonarResponse].
+extension SonarResponsePatterns on SonarResponse {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SonarResponse value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _SonarResponse() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SonarResponse value)  $default,){
+final _that = this;
+switch (_that) {
+case _SonarResponse():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SonarResponse value)?  $default,){
+final _that = this;
+switch (_that) {
+case _SonarResponse() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String response,  List<String>? images, @JsonKey(name: 'citations')  List<Citation>? sources)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _SonarResponse() when $default != null:
+return $default(_that.response,_that.images,_that.sources);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String response,  List<String>? images, @JsonKey(name: 'citations')  List<Citation>? sources)  $default,) {final _that = this;
+switch (_that) {
+case _SonarResponse():
+return $default(_that.response,_that.images,_that.sources);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String response,  List<String>? images, @JsonKey(name: 'citations')  List<Citation>? sources)?  $default,) {final _that = this;
+switch (_that) {
+case _SonarResponse() when $default != null:
+return $default(_that.response,_that.images,_that.sources);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _SonarResponse implements SonarResponse {
+   _SonarResponse({required this.response, final  List<String>? images, @JsonKey(name: 'citations') final  List<Citation>? sources}): _images = images,_sources = sources;
+  factory _SonarResponse.fromJson(Map<String, dynamic> json) => _$SonarResponseFromJson(json);
+
+@override final  String response;
+ final  List<String>? _images;
+@override List<String>? get images {
+  final value = _images;
+  if (value == null) return null;
+  if (_images is EqualUnmodifiableListView) return _images;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+ final  List<Citation>? _sources;
+@override@JsonKey(name: 'citations') List<Citation>? get sources {
+  final value = _sources;
+  if (value == null) return null;
+  if (_sources is EqualUnmodifiableListView) return _sources;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+
+/// Create a copy of SonarResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SonarResponseCopyWith<_SonarResponse> get copyWith => __$SonarResponseCopyWithImpl<_SonarResponse>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$SonarResponseToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SonarResponse&&(identical(other.response, response) || other.response == response)&&const DeepCollectionEquality().equals(other._images, _images)&&const DeepCollectionEquality().equals(other._sources, _sources));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,response,const DeepCollectionEquality().hash(_images),const DeepCollectionEquality().hash(_sources));
+
+@override
+String toString() {
+  return 'SonarResponse(response: $response, images: $images, sources: $sources)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SonarResponseCopyWith<$Res> implements $SonarResponseCopyWith<$Res> {
+  factory _$SonarResponseCopyWith(_SonarResponse value, $Res Function(_SonarResponse) _then) = __$SonarResponseCopyWithImpl;
+@override @useResult
+$Res call({
+ String response, List<String>? images,@JsonKey(name: 'citations') List<Citation>? sources
+});
+
+
+
+
+}
+/// @nodoc
+class __$SonarResponseCopyWithImpl<$Res>
+    implements _$SonarResponseCopyWith<$Res> {
+  __$SonarResponseCopyWithImpl(this._self, this._then);
+
+  final _SonarResponse _self;
+  final $Res Function(_SonarResponse) _then;
+
+/// Create a copy of SonarResponse
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? response = null,Object? images = freezed,Object? sources = freezed,}) {
+  return _then(_SonarResponse(
+response: null == response ? _self.response : response // ignore: cast_nullable_to_non_nullable
+as String,images: freezed == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
+as List<String>?,sources: freezed == sources ? _self._sources : sources // ignore: cast_nullable_to_non_nullable
+as List<Citation>?,
+  ));
+}
+
+
+}
+
+
+/// @nodoc
+mixin _$Citation {
+
+ String get url; String? get title; String? get text;
+/// Create a copy of Citation
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CitationCopyWith<Citation> get copyWith => _$CitationCopyWithImpl<Citation>(this as Citation, _$identity);
+
+  /// Serializes this Citation to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Citation&&(identical(other.url, url) || other.url == url)&&(identical(other.title, title) || other.title == title)&&(identical(other.text, text) || other.text == text));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,url,title,text);
+
+@override
+String toString() {
+  return 'Citation(url: $url, title: $title, text: $text)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CitationCopyWith<$Res>  {
+  factory $CitationCopyWith(Citation value, $Res Function(Citation) _then) = _$CitationCopyWithImpl;
+@useResult
+$Res call({
+ String url, String? title, String? text
+});
+
+
+
+
+}
+/// @nodoc
+class _$CitationCopyWithImpl<$Res>
+    implements $CitationCopyWith<$Res> {
+  _$CitationCopyWithImpl(this._self, this._then);
+
+  final Citation _self;
+  final $Res Function(Citation) _then;
+
+/// Create a copy of Citation
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? url = null,Object? title = freezed,Object? text = freezed,}) {
+  return _then(_self.copyWith(
+url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,text: freezed == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [Citation].
+extension CitationPatterns on Citation {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Citation value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Citation() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Citation value)  $default,){
+final _that = this;
+switch (_that) {
+case _Citation():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Citation value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Citation() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String url,  String? title,  String? text)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Citation() when $default != null:
+return $default(_that.url,_that.title,_that.text);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String url,  String? title,  String? text)  $default,) {final _that = this;
+switch (_that) {
+case _Citation():
+return $default(_that.url,_that.title,_that.text);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String url,  String? title,  String? text)?  $default,) {final _that = this;
+switch (_that) {
+case _Citation() when $default != null:
+return $default(_that.url,_that.title,_that.text);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _Citation implements Citation {
+   _Citation({required this.url, this.title, this.text});
+  factory _Citation.fromJson(Map<String, dynamic> json) => _$CitationFromJson(json);
+
+@override final  String url;
+@override final  String? title;
+@override final  String? text;
+
+/// Create a copy of Citation
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CitationCopyWith<_Citation> get copyWith => __$CitationCopyWithImpl<_Citation>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$CitationToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Citation&&(identical(other.url, url) || other.url == url)&&(identical(other.title, title) || other.title == title)&&(identical(other.text, text) || other.text == text));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,url,title,text);
+
+@override
+String toString() {
+  return 'Citation(url: $url, title: $title, text: $text)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$CitationCopyWith<$Res> implements $CitationCopyWith<$Res> {
+  factory _$CitationCopyWith(_Citation value, $Res Function(_Citation) _then) = __$CitationCopyWithImpl;
+@override @useResult
+$Res call({
+ String url, String? title, String? text
+});
+
+
+
+
+}
+/// @nodoc
+class __$CitationCopyWithImpl<$Res>
+    implements _$CitationCopyWith<$Res> {
+  __$CitationCopyWithImpl(this._self, this._then);
+
+  final _Citation _self;
+  final $Res Function(_Citation) _then;
+
+/// Create a copy of Citation
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? url = null,Object? title = freezed,Object? text = freezed,}) {
+  return _then(_Citation(
+url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,text: freezed == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
 // dart format on

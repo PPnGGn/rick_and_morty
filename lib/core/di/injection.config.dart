@@ -12,8 +12,12 @@
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:rick_and_morty/core/database/daos/character_description_dao.dart'
+    as _i624;
 import 'package:rick_and_morty/core/database/database.dart' as _i199;
 import 'package:rick_and_morty/core/database/database_module.dart' as _i671;
+import 'package:rick_and_morty/core/di/app_module.dart' as _i625;
+import 'package:rick_and_morty/core/di/injection.dart' as _i241;
 import 'package:rick_and_morty/core/network/network_module.dart' as _i450;
 import 'package:rick_and_morty/core/router/app_router.dart' as _i1004;
 import 'package:rick_and_morty/data/datasources/characters/characters_local_datasources.dart'
@@ -22,16 +26,24 @@ import 'package:rick_and_morty/data/datasources/characters/characters_remote_dat
     as _i405;
 import 'package:rick_and_morty/data/datasources/settings/settings_local_datasource.dart'
     as _i648;
+import 'package:rick_and_morty/data/datasources/sonar/sonar_remote_datasource.dart'
+    as _i652;
 import 'package:rick_and_morty/data/repositories/character_repository.dart'
     as _i555;
 import 'package:rick_and_morty/data/repositories/settings_repository.dart'
     as _i534;
+import 'package:rick_and_morty/data/repositories/sonar_repository_impl.dart'
+    as _i426;
 import 'package:rick_and_morty/domain/repositories/character_repository.dart'
     as _i113;
 import 'package:rick_and_morty/domain/repositories/settings_repository.dart'
     as _i59;
+import 'package:rick_and_morty/domain/repositories/sonar_repository.dart'
+    as _i646;
 import 'package:rick_and_morty/domain/usecases/character_usecases.dart'
     as _i892;
+import 'package:rick_and_morty/ui/character_detail/cubit/character_detail_cubit.dart'
+    as _i856;
 import 'package:rick_and_morty/ui/characters/cubit/characters_cubit.dart'
     as _i275;
 import 'package:rick_and_morty/ui/favorites/cubit/favorites_cubit.dart'
@@ -40,13 +52,16 @@ import 'package:rick_and_morty/ui/settings/cubit/settings_cubit.dart' as _i1033;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
-  _i174.GetIt init({
+  Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) {
+  }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final envModule = _$EnvModule();
     final dBModule = _$DBModule();
     final networkModule = _$NetworkModule();
+    final appModule = _$AppModule();
+    await gh.factoryAsync<String>(() => envModule.apiKey, preResolve: true);
     gh.singleton<_i1004.AppRouter>(() => _i1004.AppRouter());
     gh.lazySingleton<_i199.AppDatabase>(() => dBModule.appDatabase());
     gh.lazySingleton<_i361.Dio>(() => networkModule.dio());
@@ -61,6 +76,19 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i633.CharacterLocalDataSource>(
       () => _i633.CharacterLocalDataSource(gh<_i199.AppDatabase>()),
+    );
+    gh.lazySingleton<String>(
+      () => appModule.perplexityApiKey,
+      instanceName: 'perplexityApiKey',
+    );
+    gh.lazySingleton<_i624.CharacterDescriptionDao>(
+      () => dBModule.characterDescriptionDao(gh<_i199.AppDatabase>()),
+    );
+    gh.lazySingleton<_i652.SonarRemoteDatasource>(
+      () => _i652.SonarRemoteDatasource(
+        dio: gh<_i361.Dio>(),
+        apiKey: gh<String>(),
+      ),
     );
     gh.factory<_i1033.SettingsCubit>(
       () => _i1033.SettingsCubit(gh<_i59.SettingsRepository>()),
@@ -101,6 +129,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i892.GetFavoriteIdsUseCase>(
       () => _i892.GetFavoriteIdsUseCase(gh<_i113.CharacterRepository>()),
     );
+    gh.lazySingleton<_i646.SonarRepository>(
+      () => _i426.SonarRepositoryImpl(
+        remoteDatasource: gh<_i652.SonarRemoteDatasource>(),
+        dao: gh<_i624.CharacterDescriptionDao>(),
+      ),
+    );
     gh.factory<_i853.FavoritesCubit>(
       () => _i853.FavoritesCubit(
         gh<_i892.GetFavoritesUseCase>(),
@@ -115,10 +149,20 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i892.GetFavoriteIdsUseCase>(),
       ),
     );
+    gh.factory<_i856.CharacterDetailCubit>(
+      () => _i856.CharacterDetailCubit(
+        gh<_i113.CharacterRepository>(),
+        gh<_i646.SonarRepository>(),
+      ),
+    );
     return this;
   }
 }
 
+class _$EnvModule extends _i241.EnvModule {}
+
 class _$DBModule extends _i671.DBModule {}
 
 class _$NetworkModule extends _i450.NetworkModule {}
+
+class _$AppModule extends _i625.AppModule {}

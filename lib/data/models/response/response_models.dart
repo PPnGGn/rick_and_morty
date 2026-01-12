@@ -9,3 +9,5 @@ part 'origin.dart';
 part 'location.dart';
 part 'characters_response.dart';
 part 'info.dart';
+part 'sonar_response.dart';
+part 'citation.dart';

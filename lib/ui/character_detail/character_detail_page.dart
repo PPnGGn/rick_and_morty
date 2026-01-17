@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/core/di/injection.dart';
 import 'package:rick_and_morty/ui/character_detail/cubit/character_detail_cubit.dart';
+import 'package:rick_and_morty/ui/widgets/markdown_content.dart';
 
 @RoutePage()
 class CharacterDetailPage extends StatelessWidget {
@@ -141,7 +142,10 @@ class CharacterDetailPage extends StatelessWidget {
               ),
             )
           else if (text != null && text.isNotEmpty) ...[
-            Text(text, style: Theme.of(context).textTheme.bodyLarge),
+            MarkdownContent(
+              data: text,
+              isStreaming: isStreaming,
+            ),
             const SizedBox(height: 16),
 
             // Индикаторы состояния

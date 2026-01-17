@@ -43,6 +43,8 @@ dependencies:
   # Utils
   logger: ^2.0.2
 
+  flutter_markdown_plus: ^1.0.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

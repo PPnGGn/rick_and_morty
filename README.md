@@ -8,6 +8,8 @@ Flutter приложение для просмотра информации о �
 <img width="300" height="600" alt="image" src="https://github.com/user-attachments/assets/01a11d98-b959-4f25-9ca0-e0966ace7f6d" />
 
 
+https://github.com/user-attachments/assets/0c009a79-0422-4fb8-b46d-f150ecbed5a1
+
 
 <img width="300" height="600" alt="Simulator Screenshot - iPhone 17 - 2025-10-07 at 10 31 42" src="https://github.com/user-attachments/assets/a51fcfed-2db4-4ac8-bd89-4a8409da5841" />
 <img width="300" height="600" alt="Simulator Screenshot - iPhone 17 - 2025-10-07 at 10 31 47" src="https://github.com/user-attachments/assets/72b5dd64-04d9-4a1a-b42f-99749e8444d2" />

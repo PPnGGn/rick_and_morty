@@ -1,8 +1,13 @@
 # Rick and Morty App
 
-Flutter приложение для просмотра информации о персонажах вселенной Rick and Morty.
+Flutter приложение для просмотра информации о персонажах вселенной Rick and Morty с интеграцией ИИ.
 
 # Скриншоты
+
+<img width="300" height="600" alt="image" src="https://github.com/user-attachments/assets/128b3f46-bab0-4d93-a27f-a06d489c0357" />
+<img width="300" height="600" alt="image" src="https://github.com/user-attachments/assets/01a11d98-b959-4f25-9ca0-e0966ace7f6d" />
+
+
 
 <img width="300" height="600" alt="Simulator Screenshot - iPhone 17 - 2025-10-07 at 10 31 42" src="https://github.com/user-attachments/assets/a51fcfed-2db4-4ac8-bd89-4a8409da5841" />
 <img width="300" height="600" alt="Simulator Screenshot - iPhone 17 - 2025-10-07 at 10 31 47" src="https://github.com/user-attachments/assets/72b5dd64-04d9-4a1a-b42f-99749e8444d2" />
@@ -18,6 +23,9 @@ Flutter приложение для просмотра информации о �
 - Добавление/удаление в избранное
 - Поддержка светлой и темной темы
 - Оффлайн-доступ к данным
+- Интеграция Perplexity sonar-pro для генерации описания персонажа в markdown формате
+- REST/HTTP подключение к бекенду rick and morty
+- SSE подключение к Perplexity для генерации описания в прямом эфире
 
 # Стек
 
